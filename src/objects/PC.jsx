@@ -3,6 +3,7 @@ import { Animations, registerMaterial } from "../Manager";
 import { extend, useFrame, useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import HtmlLabel from "../components/HtmlLabel";
+import { onFrame, onHover, onLeave } from "./common";
 
 export default function PC({ geometry, material, position, screen }) {
     const modelRef = useRef();
@@ -18,20 +19,12 @@ export default function PC({ geometry, material, position, screen }) {
         if (!modelRef.current) return;
         if (!screenRef.current) return;
 
-        modelRef.current.material.uniforms.uTime.value += delta;
-        screenRef.current.material.uniforms.uTime.value += delta;
+        onFrame(modelRef.current.material, delta);
+        onFrame(screenRef.current.material, delta);
     });
 
-    const onHover = () => {
-        document.body.style.cursor = "pointer";
-        modelRef.current.material.uniforms.uTime.value = 0;
-        modelRef.current.material.uniforms.uIsHovered.value = true;
-    };
-
-    const onLeave = () => {
-        document.body.style.cursor = "auto";
-        modelRef.current.material.uniforms.uIsHovered.value = false;
-    };
+    const _onHover = () => onHover(modelRef.current.material);
+    const _onLeave = () => onLeave(modelRef.current.material);
 
     const onClick = () => {
         Animations.zoomPC(camera, controls, modelRef.current, () => {
@@ -51,9 +44,9 @@ export default function PC({ geometry, material, position, screen }) {
     }
 
     return (
-        <mesh geometry={geometry} material={material} position={position} onPointerEnter={onHover} onPointerLeave={onLeave} onClick={onClick} ref={modelRef}>
-            <mesh {...screen} ref={screenRef} />
-            <HtmlLabel text="PC" onPointerEnter={onHover} onPointerLeave={onLeave} onClick={onClick} position={[0, 0.25, 0]} width="25px" />
+        <mesh geometry={geometry} material={material} position={position} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} ref={modelRef}>
+        <mesh {...screen} ref={screenRef} />
+            <HtmlLabel text="PC" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.25, 0]} width="25px" />
         </mesh>
     );
 }

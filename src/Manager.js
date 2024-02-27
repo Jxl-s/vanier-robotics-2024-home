@@ -105,4 +105,17 @@ export const Animations = {
             afterZoom
         );
     },
+
+    zoomBox: (camera, controls, model, afterZoom, beforeZoom) => {
+        Animations._beforeZoomBack = beforeZoom;
+        Animations.zoomedItem = "Box";
+
+        return Animations._zoomObject(
+            camera,
+            controls,
+            model,
+            { x: 3, y: 3, z: 0 },
+            afterZoom
+        );
+    },
 };

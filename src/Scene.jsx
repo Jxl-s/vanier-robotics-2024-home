@@ -12,6 +12,7 @@ import { useMemo } from 'react';
 import TVScreen from './objects/TVScreen';
 import PC from './objects/PC';
 import PCScreenMaterial from './shaders/pcScreenMaterial';
+import Box from './objects/Box';
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
@@ -80,13 +81,15 @@ export function Scene(props) {
         material: pcScreenMaterial
       }} />
 
+      <Box geometry={nodes.Box.geometry} material={commonMaterial.clone()} position={[-0.543, -0.881, 0.612]} rotation={[0, -0.364, 0]} cover={{
+        geometry: nodes.BoxCover.geometry,
+        position: [-0.117, 0.097, -0.003]
+      }} />
+
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />
       <mesh geometry={nodes.PaperRed.geometry} material={commonMaterial} position={[-0.989, 0.266, -0.068]} />
       <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} />
       <mesh geometry={nodes.Shelves.geometry} material={commonMaterial} position={[-0.231, -0.081, -1.154]} rotation={[0, Math.PI / 2, 0]} />
-      <mesh geometry={nodes.Box.geometry} material={commonMaterial} position={[-0.543, -0.881, 0.612]} rotation={[0, -0.364, 0]}>
-        <mesh geometry={nodes.BoxCover.geometry} material={commonMaterial} position={[-0.117, 0.097, -0.003]} />
-      </mesh>
       <mesh geometry={nodes.Mat.geometry} material={commonMaterial} position={[1.768, -0.996, 0.36]} />
       <mesh geometry={nodes.PaperYellow.geometry} material={commonMaterial} position={[-0.995, 0.124, -0.582]} />
       <mesh geometry={nodes.PaperGray.geometry} material={commonMaterial} position={[-0.992, 0.017, -0.025]} />
