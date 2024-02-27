@@ -13,6 +13,7 @@ import TVScreen from './objects/TVScreen';
 import PC from './objects/PC';
 import PCScreenMaterial from './shaders/pcScreenMaterial';
 import Box from './objects/Box';
+import Projector from './objects/Projector';
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
@@ -86,16 +87,20 @@ export function Scene(props) {
         position: [-0.117, 0.097, -0.003]
       }} />
 
+      <Projector geometry={nodes.Projector.geometry} material={commonMaterial.clone()} position={[1.537, -0.347, -1.339]} screen={{
+        geometry: nodes.ProjectorScreen.geometry,
+        position: [0.091, 0.096, -0.001]
+      }} />
+
+      <mesh geometry={nodes.Shelves.geometry} material={commonMaterial} position={[-0.231, -0.081, -1.154]} rotation={[0, Math.PI / 2, 0]} />
+
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />
       <mesh geometry={nodes.PaperRed.geometry} material={commonMaterial} position={[-0.989, 0.266, -0.068]} />
       <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} />
-      <mesh geometry={nodes.Shelves.geometry} material={commonMaterial} position={[-0.231, -0.081, -1.154]} rotation={[0, Math.PI / 2, 0]} />
       <mesh geometry={nodes.Mat.geometry} material={commonMaterial} position={[1.768, -0.996, 0.36]} />
       <mesh geometry={nodes.PaperYellow.geometry} material={commonMaterial} position={[-0.995, 0.124, -0.582]} />
       <mesh geometry={nodes.PaperGray.geometry} material={commonMaterial} position={[-0.992, 0.017, -0.025]} />
-      <mesh geometry={nodes.Projector.geometry} material={commonMaterial} position={[1.537, -0.347, -1.339]}>
-        <mesh geometry={nodes.ProjectorScreen.geometry} material={commonMaterial} position={[0.091, 0.096, -0.001]} />
-      </mesh>
+
       <mesh geometry={nodes.Decor.geometry} material={commonMaterial} position={[-0.154, -0.818, -0.039]} rotation={[Math.PI, -0.278, Math.PI]} />
       <mesh geometry={nodes.TV1.geometry} material={commonMaterial} position={[0.371, 0.785, -0.766]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
 

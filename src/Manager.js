@@ -6,13 +6,17 @@ export const registerMaterial = (material) => {
     Materials.push(material);
 };
 
-export const updateNightMix = (value) => {
-    Materials.forEach((material) => {
-        material.uniforms.uNightMix.value = value;
+export const updateNightMix = (value, callback) => {
+    Materials.forEach((material, i) => {
+        gsap.to(material.uniforms.uNightMix, {
+            value: value,
+            duration: 0.2,
+            ease: "power1.inOut",
+            onComplete: () => i == 0 && callback?.(),
+        });
     });
 };
 
-window.updateNightMix = updateNightMix;
 export const Animations = {
     // Backup of the original camera position
     originalPosition: new THREE.Vector3(),
@@ -52,6 +56,7 @@ export const Animations = {
                 },
                 onComplete: () => {
                     Animations.isZooming = false;
+                    Animations.isZoomed = false;
                 },
             });
         });
@@ -63,7 +68,6 @@ export const Animations = {
         // If we're already zoomed in, go back
         if (Animations.isZoomed) {
             Animations.zoomBack(camera, controls);
-            Animations.isZoomed = false;
             return;
         }
 
@@ -84,7 +88,7 @@ export const Animations = {
             duration: 1,
             ease: "power1.inOut",
             onUpdate: () => {
-                controls.target.lerp(v, 0.05);
+                controls.target.lerp(v, 0.1);
             },
             onComplete: () => {
                 Animations.isZooming = false;
@@ -118,4 +122,19 @@ export const Animations = {
             afterZoom
         );
     },
+
+    zoomProjector: (camera, controls, model, afterZoom, beforeZoom) => {
+        Animations._beforeZoomBack = beforeZoom;
+        Animations.zoomedItem = "Projector";
+
+        const maxWidth = window.screen.availWidth - (window.outerWidth - window.innerWidth);
+
+        return Animations._zoomObject(
+            camera,
+            controls,
+            model,
+            { x: 0, y: 0, z: maxWidth/window.innerWidth * 5 },
+            afterZoom
+        );
+    }
 };

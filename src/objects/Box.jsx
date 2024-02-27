@@ -3,8 +3,8 @@ import { Animations, registerMaterial } from "../Manager";
 import { onFrame, onHover, onLeave } from "./common";
 import { useFrame, useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import * as THREE from "three";
 import HtmlLabel from "../components/HtmlLabel";
+import { Html } from "@react-three/drei";
 
 export default function Box({ geometry, material, position, rotation, cover }) {
     const boxRef = useRef();
@@ -15,7 +15,6 @@ export default function Box({ geometry, material, position, rotation, cover }) {
     useEffect(() => {
         if (!boxRef.current) return;
         registerMaterial(boxRef.current.material);
-        boxRef.current.material.side = THREE.DoubleSide;
 
     }, [boxRef]);
 
@@ -29,7 +28,7 @@ export default function Box({ geometry, material, position, rotation, cover }) {
     const onClick = () => {
         Animations.zoomBox(camera, controls, boxRef.current, () => {
             gsap.to(coverRef.current.rotation, {
-                y: (1/16) * Math.PI,
+                y: (1 / 16) * Math.PI,
                 duration: 1,
                 ease: "power1.inOut",
             });
@@ -55,8 +54,10 @@ export default function Box({ geometry, material, position, rotation, cover }) {
         });
     }
 
-    return <mesh geometry={geometry} material={material} position={position} rotation={rotation} ref={boxRef} onPointerOver={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
-        <mesh material={material} ref={coverRef} {...cover} />
-        <HtmlLabel text="Box" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.25, 0]} width="25px" />
-    </mesh>
+    return <>
+        <mesh geometry={geometry} material={material} position={position} rotation={rotation} ref={boxRef} onPointerOver={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
+            <mesh material={material} ref={coverRef} {...cover} />
+            <HtmlLabel text="Box" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.25, 0]} width="25px" />
+        </mesh>
+    </>
 }
