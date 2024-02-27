@@ -11,6 +11,7 @@ import { registerMaterial } from './Manager';
 import { useMemo } from 'react';
 import TVScreen from './objects/TVScreen';
 import PC from './objects/PC';
+import PCScreenMaterial from './shaders/pcScreenMaterial';
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
@@ -32,6 +33,11 @@ export function Scene(props) {
 
     return newMaterial;
   }, [bakedDay, bakedNight]);
+
+  const pcScreenMaterial = useMemo(() => new PCScreenMaterial({
+    uBrightness: 0,
+    uTime: 0,
+  }), []);
 
   return (
     <group {...props} dispose={null}>
@@ -71,7 +77,7 @@ export function Scene(props) {
       <PC geometry={nodes.PC.geometry} material={commonMaterial.clone()} position={[-0.659, -0.345, -0.092]} screen={{
         geometry: nodes.PCScreen.geometry,
         position: [0.053, 0.015, 0.002],
-        material: commonMaterial.clone(),
+        material: pcScreenMaterial
       }} />
 
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />

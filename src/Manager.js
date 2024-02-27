@@ -12,6 +12,7 @@ export const updateNightMix = (value) => {
     });
 };
 
+window.updateNightMix = updateNightMix;
 export const Animations = {
     // Backup of the original camera position
     originalPosition: new THREE.Vector3(),
