@@ -26,7 +26,7 @@ void main() {
 
     // Hover effect
     if (uIsHovered) {
-        mixColor += abs(sin(uTime * 5.0)) * 0.5;
+        mixColor += abs(sin(uTime * 2.0)) * 0.2;
     }
 
     gl_FragColor = mixColor;

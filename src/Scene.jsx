@@ -10,6 +10,7 @@ import BakedMaterial from './shaders/bakedMaterial';
 import { registerMaterial } from './Manager';
 import { useMemo } from 'react';
 import TVScreen from './objects/TVScreen';
+import PC from './objects/PC';
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
@@ -67,10 +68,12 @@ export function Scene(props) {
         }}
       />
 
+      <PC geometry={nodes.PC.geometry} material={commonMaterial.clone()} position={[-0.659, -0.345, -0.092]} child={{
+        geometry: nodes.PCScreen.geometry,
+        position: [0.053, 0.015, 0.002]
+      }} />
+
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />
-      <mesh geometry={nodes.PC.geometry} material={commonMaterial} position={[-0.659, -0.345, -0.092]}>
-        <mesh geometry={nodes.PCScreen.geometry} material={commonMaterial} position={[0.053, 0.015, 0.002]} />
-      </mesh>
       <mesh geometry={nodes.PaperRed.geometry} material={commonMaterial} position={[-0.989, 0.266, -0.068]} />
       <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} />
       <mesh geometry={nodes.Shelves.geometry} material={commonMaterial} position={[-0.231, -0.081, -1.154]} rotation={[0, Math.PI / 2, 0]} />

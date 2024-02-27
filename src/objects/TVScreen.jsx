@@ -51,12 +51,3 @@ export default function TVScreen({
         <mesh {...lightProps} material={lightMaterial} />
     </>
 }
-
-TVScreen.propTypes = {
-    video: PropTypes.string.isRequired,
-    position: PropTypes.array.isRequired,
-    rotation: PropTypes.array.isRequired,
-
-    powerProps: PropTypes.object.isRequired,
-    lightProps: PropTypes.object.isRequired
-};
