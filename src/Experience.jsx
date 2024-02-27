@@ -1,4 +1,4 @@
-import { OrbitControls, Stage } from "@react-three/drei";
+import { Bounds, OrbitControls, Stage } from "@react-three/drei";
 import { Scene } from "./Scene";
 
 export default function Experience() {
@@ -14,8 +14,8 @@ export default function Experience() {
             enablePan={false}
         />
         <axesHelper />
-        <Stage environment={null}>
+        <Bounds fit observe margin={1} >
             <Scene scale={[4, 4, 4]} />
-        </Stage>
+        </Bounds>
     </>
 }

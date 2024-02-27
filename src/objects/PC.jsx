@@ -24,7 +24,7 @@ export default function PC({ geometry, material, position, screen }) {
 
     const onHover = () => {
         document.body.style.cursor = "pointer";
-        modelRef.current.material.uniforms.uTime.value = 0.5;
+        modelRef.current.material.uniforms.uTime.value = 0;
         modelRef.current.material.uniforms.uIsHovered.value = true;
     };
 
