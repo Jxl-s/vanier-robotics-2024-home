@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react"
-import * as THREE from "three";
 import { Animations, registerMaterial } from "../Manager";
 import { useFrame, useThree } from "@react-three/fiber";
-import gsap from "gsap";
 
 export default function PC({ geometry, material, position, child }) {
     const modelRef = useRef();
@@ -16,8 +14,6 @@ export default function PC({ geometry, material, position, child }) {
     useFrame((_, delta) => {
         if (!modelRef.current) return;
         modelRef.current.material.uniforms.uTime.value += delta;
-
-        console.log(camera.position);
     });
 
     const onHover = () => {
