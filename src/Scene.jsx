@@ -10,16 +10,16 @@ import Vanopoly from './objects/Vanopoly';
 import BakedMaterial from './shaders/bakedMaterial';
 import { registerMaterial } from './Manager';
 import { useMemo } from 'react';
+import TVScreen from './objects/TVScreen';
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
+
   const bakedDay = useTexture('/textures/bakedDay.jpg');
   bakedDay.flipY = false;
-  bakedDay.colorSpace = THREE.LinearSRGBColorSpace;
 
   const bakedNight = useTexture('/textures/bakedNight.jpg');
   bakedNight.flipY = false;
-  bakedNight.colorSpace = THREE.LinearSRGBColorSpace;
 
   const commonMaterial = useMemo(() => {
     const newMaterial = new BakedMaterial({
@@ -55,8 +55,14 @@ export function Scene(props) {
       </mesh>
       <mesh geometry={nodes.Decor.geometry} material={commonMaterial} position={[-0.154, -0.818, -0.039]} rotation={[Math.PI, -0.278, Math.PI]} />
       <mesh geometry={nodes.TV1.geometry} material={commonMaterial} position={[0.371, 0.785, -0.766]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
-      <mesh geometry={nodes.TV1Screen.geometry} material={commonMaterial} position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
-      <mesh geometry={nodes.TV2Screen.geometry} material={commonMaterial} position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} />
+
+      {/* Remove original screens, replace with screens */}
+      {/* <mesh geometry={nodes.TV1Screen.geometry} material={commonMaterial} position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} /> */}
+      {/* <mesh geometry={nodes.TV2Screen.geometry} material={commonMaterial} position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} /> */}
+
+      <TVScreen position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} video="/videos/camera_1.mp4" />
+      <TVScreen position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} video="/videos/camera_2.mp4" />
+
       <mesh geometry={nodes.TV2Power.geometry} material={commonMaterial} position={[2.008, 0.561, -1.312]} rotation={[0.175, 0, 0]} />
       <mesh geometry={nodes.TV2Light.geometry} material={commonMaterial} position={[1.963, 0.561, -1.312]} rotation={[0.175, 0, 0]} />
       <mesh geometry={nodes.TV1Power.geometry} material={commonMaterial} position={[-0.898, 0.561, -0.6]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />

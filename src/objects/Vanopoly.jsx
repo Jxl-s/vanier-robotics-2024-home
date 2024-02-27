@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react"
 import { registerMaterial } from "../Manager";
 
 const BLINK_FREQUENCY = 2000;
+
 export default function Vanopoly(props) {
     const textRef = useRef();
 

@@ -6,7 +6,10 @@ import { Canvas } from '@react-three/fiber'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Canvas>
+    <Canvas camera={{
+      position: [4, 2, 4],
+      fov: 60
+    }}>
       <Experience />
     </Canvas>
   </React.StrictMode>,

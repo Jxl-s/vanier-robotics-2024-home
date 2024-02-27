@@ -7,15 +7,27 @@ uniform float uNightMix;
 
 // Hover effect
 uniform float uTime;
-uniform float uIsHovered;
+uniform bool uIsHovered;
 
 // Blink (light) effect
 uniform bool uLightUp;
 
 void main() {
+    // Light up effect
+    if(uLightUp) {
+        gl_FragColor = vec4(1.0);
+        return;
+    }
+
+    // Day-night transition
     vec4 dayColor = texture2D(uTextureDay, vUv);
     vec4 nightColor = texture2D(uTextureNight, vUv);
     vec4 mixColor = mix(dayColor, nightColor, uNightMix);
 
-    gl_FragColor = uLightUp ? vec4(1.0) : mixColor;
+    // Hover effect
+    if (uIsHovered) {
+        mixColor += abs(sin(uTime * 5.0)) * 0.5;
+    }
+
+    gl_FragColor = mixColor;
 }

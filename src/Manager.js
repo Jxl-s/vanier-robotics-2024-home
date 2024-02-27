@@ -12,3 +12,4 @@ export const updateNightMix = (value) => {
 }
 
 window.updateNightMix = updateNightMix;
+window.Materials = Materials;
