@@ -4,7 +4,6 @@ Command: npx gltfjsx@6.2.16 .\public\models\scene.glb
 */
 
 import { useGLTF, useTexture } from '@react-three/drei'
-import * as THREE from "three";
 import Chair from './objects/Chair';
 import Vanopoly from './objects/Vanopoly';
 import BakedMaterial from './shaders/bakedMaterial';
@@ -35,6 +34,39 @@ export function Scene(props) {
 
   return (
     <group {...props} dispose={null}>
+      <Vanopoly geometry={nodes.VanopolyText.geometry} material={commonMaterial.clone()} position={[0.102, 0.387, -1.029]} rotation={[Math.PI / 2, -0.129, 0]} />
+      <Chair geometry={nodes.Chair.geometry} material={commonMaterial} position={[-0.142, -0.638, -0.138]} rotation={[Math.PI, -1.048, Math.PI]} />
+
+      {/* Remove original screens, replace with screens */}
+      {/* <mesh geometry={nodes.TV1Screen.geometry} material={commonMaterial} position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} /> */}
+      {/* <mesh geometry={nodes.TV2Screen.geometry} material={commonMaterial} position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} /> */}
+
+      <TVScreen position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} video="/videos/camera_1.mp4"
+        powerProps={{
+          geometry: nodes.TV1Power.geometry,
+          position: [-0.898, 0.561, -0.6],
+          rotation: [Math.PI / 2, 1.396, -Math.PI / 2]
+        }}
+        lightProps={{
+          geometry: nodes.TV1Light.geometry,
+          position: [-0.898, 0.561, -0.555],
+          rotation: [Math.PI / 2, 1.396, -Math.PI / 2]
+        }}
+      />
+
+      <TVScreen position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} video="/videos/camera_2.mp4"
+        powerProps={{
+          geometry: nodes.TV2Power.geometry,
+          position: [2.008, 0.561, -1.312],
+          rotation: [0.175, 0, 0]
+        }}
+        lightProps={{
+          geometry: nodes.TV2Light.geometry,
+          position: [1.963, 0.561, -1.312],
+          rotation: [0.175, 0, 0]
+        }}
+      />
+
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />
       <mesh geometry={nodes.PC.geometry} material={commonMaterial} position={[-0.659, -0.345, -0.092]}>
         <mesh geometry={nodes.PCScreen.geometry} material={commonMaterial} position={[0.053, 0.015, 0.002]} />
@@ -46,8 +78,6 @@ export function Scene(props) {
         <mesh geometry={nodes.BoxCover.geometry} material={commonMaterial} position={[-0.117, 0.097, -0.003]} />
       </mesh>
       <mesh geometry={nodes.Mat.geometry} material={commonMaterial} position={[1.768, -0.996, 0.36]} />
-      <Vanopoly geometry={nodes.VanopolyText.geometry} material={commonMaterial.clone()} position={[0.102, 0.387, -1.029]} rotation={[Math.PI / 2, -0.129, 0]} />
-      <Chair geometry={nodes.Chair.geometry} material={commonMaterial} position={[-0.142, -0.638, -0.138]} rotation={[Math.PI, -1.048, Math.PI]} />
       <mesh geometry={nodes.PaperYellow.geometry} material={commonMaterial} position={[-0.995, 0.124, -0.582]} />
       <mesh geometry={nodes.PaperGray.geometry} material={commonMaterial} position={[-0.992, 0.017, -0.025]} />
       <mesh geometry={nodes.Projector.geometry} material={commonMaterial} position={[1.537, -0.347, -1.339]}>
@@ -56,18 +86,7 @@ export function Scene(props) {
       <mesh geometry={nodes.Decor.geometry} material={commonMaterial} position={[-0.154, -0.818, -0.039]} rotation={[Math.PI, -0.278, Math.PI]} />
       <mesh geometry={nodes.TV1.geometry} material={commonMaterial} position={[0.371, 0.785, -0.766]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
 
-      {/* Remove original screens, replace with screens */}
-      {/* <mesh geometry={nodes.TV1Screen.geometry} material={commonMaterial} position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} /> */}
-      {/* <mesh geometry={nodes.TV2Screen.geometry} material={commonMaterial} position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} /> */}
-
-      <TVScreen position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} video="/videos/camera_1.mp4" />
-      <TVScreen position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} video="/videos/camera_2.mp4" />
-
-      <mesh geometry={nodes.TV2Power.geometry} material={commonMaterial} position={[2.008, 0.561, -1.312]} rotation={[0.175, 0, 0]} />
-      <mesh geometry={nodes.TV2Light.geometry} material={commonMaterial} position={[1.963, 0.561, -1.312]} rotation={[0.175, 0, 0]} />
-      <mesh geometry={nodes.TV1Power.geometry} material={commonMaterial} position={[-0.898, 0.561, -0.6]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
-      <mesh geometry={nodes.TV1Light.geometry} material={commonMaterial} position={[-0.898, 0.561, -0.555]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
-    </group>
+    </group >
   )
 }
 
