@@ -127,14 +127,15 @@ export const Animations = {
         Animations._beforeZoomBack = beforeZoom;
         Animations.zoomedItem = "Projector";
 
-        const maxWidth = window.screen.availWidth - (window.outerWidth - window.innerWidth);
+        const maxWidth =
+            window.screen.availWidth - (window.outerWidth - window.innerWidth);
 
         return Animations._zoomObject(
             camera,
             controls,
             model,
-            { x: 0, y: 0, z: maxWidth/window.innerWidth * 5 },
+            { x: 0, y: 0, z: (maxWidth / window.innerWidth) * 5 },
             afterZoom
         );
-    }
+    },
 };

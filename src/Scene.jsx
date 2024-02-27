@@ -14,6 +14,7 @@ import PC from './objects/PC';
 import PCScreenMaterial from './shaders/pcScreenMaterial';
 import Box from './objects/Box';
 import Projector from './objects/Projector';
+import SimpleClickable from './objects/SimpleClickable';
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
@@ -92,17 +93,83 @@ export function Scene(props) {
         position: [0.091, 0.096, -0.001]
       }} />
 
-      <mesh geometry={nodes.Shelves.geometry} material={commonMaterial} position={[-0.231, -0.081, -1.154]} rotation={[0, Math.PI / 2, 0]} />
+      <SimpleClickable props={{
+        geometry: nodes.Shelves.geometry,
+        material: commonMaterial.clone(),
+        position: [-0.231, -0.081, -1.154],
+        rotation: [0, Math.PI / 2, 0]
+      }}
+        cameraOffset={{ x: 5, y: 0, z: 5 }}
+        label={{
+          width: "50px",
+          text: "Shelves",
+          position: [0, 0.7, 0.3]
+        }}
+      />
+      {/* <mesh geometry={nodes.Shelves.geometry} material={commonMaterial} position={[-0.231, -0.081, -1.154]} rotation={[0, Math.PI / 2, 0]} /> */}
+      
+      <SimpleClickable props={{
+        geometry: nodes.PaperRed.geometry,
+        material: commonMaterial.clone(),
+        position: [-0.989, 0.266, -0.068],
+      }}
+        cameraOffset={{ x: 1.5, y: 0, z: 0 }}
+        label={{
+          width: "50px",
+          text: "Captains",
+          position: [0, 0.1, 0]
+        }}
+      />
+      {/* <mesh geometry={nodes.PaperRed.geometry} material={commonMaterial} position={[-0.989, 0.266, -0.068]} /> */}
 
+      <SimpleClickable props={{
+        geometry: nodes.PaperYellow.geometry,
+        material: commonMaterial.clone(),
+        position: [-0.995, 0.124, -0.582],
+      }}
+        cameraOffset={{ x: 1.5, y: 0, z: 0 }}
+        label={{
+          width: "50px",
+          text: "About CRC",
+          position: [0, 0.1, 0]
+        }}
+      />
+      {/* <mesh geometry={nodes.PaperYellow.geometry} material={commonMaterial} position={[-0.995, 0.124, -0.582]} /> */}
+
+      <SimpleClickable props={{
+        geometry: nodes.PaperGray.geometry,
+        material: commonMaterial.clone(),
+        position: [-0.992, 0.017, -0.025],
+      }}
+        cameraOffset={{ x: 1.5, y: 0, z: 0 }}
+        label={{
+          width: "50px",
+          text: "Sponsors",
+          position: [0, 0, 0]
+        }}
+      />
+      {/* <mesh geometry={nodes.PaperGray.geometry} material={commonMaterial} position={[-0.992, 0.017, -0.025]} /> */}
+
+      <SimpleClickable props={{
+        geometry: nodes.Portfolios.geometry,
+        material: commonMaterial.clone(),
+        position: [-0.742, -0.573, -0.561],
+        rotation: [0, 0.64, 0],
+      }}
+        cameraOffset={{ x: 1, y: 1, z: 1 }}
+        label={{
+          width: "50px",
+          text: "Portfolio",
+          position: [0, 0.1, 0]
+        }}
+      />
+
+      {/* <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} /> */}
+      
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />
-      <mesh geometry={nodes.PaperRed.geometry} material={commonMaterial} position={[-0.989, 0.266, -0.068]} />
-      <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} />
-      <mesh geometry={nodes.Mat.geometry} material={commonMaterial} position={[1.768, -0.996, 0.36]} />
-      <mesh geometry={nodes.PaperYellow.geometry} material={commonMaterial} position={[-0.995, 0.124, -0.582]} />
-      <mesh geometry={nodes.PaperGray.geometry} material={commonMaterial} position={[-0.992, 0.017, -0.025]} />
-
       <mesh geometry={nodes.Decor.geometry} material={commonMaterial} position={[-0.154, -0.818, -0.039]} rotation={[Math.PI, -0.278, Math.PI]} />
       <mesh geometry={nodes.TV1.geometry} material={commonMaterial} position={[0.371, 0.785, -0.766]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
+      <mesh geometry={nodes.Mat.geometry} material={commonMaterial} position={[1.768, -0.996, 0.36]} />
 
     </group >
   )

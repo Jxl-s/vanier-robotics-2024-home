@@ -46,7 +46,7 @@ export default function PC({ geometry, material, position, screen }) {
     return (
         <mesh geometry={geometry} material={material} position={position} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} ref={modelRef}>
         <mesh {...screen} ref={screenRef} />
-            <HtmlLabel text="PC" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.25, 0]} width="25px" />
+            <HtmlLabel text="About Vanier" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.25, 0]} width="75px" />
         </mesh>
     );
 }
