@@ -10,12 +10,12 @@ uniform float uTime;
 uniform bool uIsHovered;
 
 // Blink (light) effect
-uniform bool uLightUp;
+uniform float uLightUp;
 
 void main() {
     // Light up effect
-    if(uLightUp) {
-        gl_FragColor = vec4(1.0);
+    if(uLightUp > 0.0) {
+        gl_FragColor = vec4(vec3(uLightUp), 1.0);
         return;
     }
 
@@ -25,7 +25,7 @@ void main() {
     vec4 mixColor = mix(dayColor, nightColor, uNightMix);
 
     // Hover effect
-    if (uIsHovered) {
+    if(uIsHovered) {
         mixColor += abs(sin(uTime * 2.0)) * 0.2;
     }
 

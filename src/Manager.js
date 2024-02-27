@@ -20,50 +20,66 @@ export const Animations = {
     isZoomed: false,
     isZooming: false,
 
+    zoomedItem: null,
+    zoomBackEvent: null,
+
     setOriginalPosition: (vector, lookAt) => {
         Animations.originalPosition.copy(vector);
         Animations.originalLookAt.copy(lookAt);
     },
 
+    _beforeZoomBack: (startZoom) => {
+        Animations.zoomBackEvent?.(startZoom);
+    },
+
     zoomBack: (camera, controls) => {
         if (Animations.isZooming) return;
-
         Animations.isZooming = true;
-        gsap.to(camera.position, {
-            x: Animations.originalPosition.x,
-            y: Animations.originalPosition.y,
-            z: Animations.originalPosition.z,
-            duration: 1,
-            ease: "power1.inOut",
-            onUpdate: () => {
-                controls.target.lerp(Animations.originalLookAt, 0.05);
-            },
-            onComplete: () => {
-                Animations.isZooming = false;
-            },
+
+        // Remove the current object
+        Animations.zoomedItem = null;
+        Animations._beforeZoomBack(() => {
+            Animations._beforeZoomBack = null;
+            gsap.to(camera.position, {
+                x: Animations.originalPosition.x,
+                y: Animations.originalPosition.y,
+                z: Animations.originalPosition.z,
+                duration: 1,
+                ease: "power1.inOut",
+                onUpdate: () => {
+                    controls.target.lerp(Animations.originalLookAt, 0.02);
+                },
+                onComplete: () => {
+                    Animations.isZooming = false;
+                },
+            });
         });
     },
-    zoomPC: (camera, controls, model) => {
+
+    _zoomObject: (camera, controls, object, offset, callback) => {
         if (Animations.isZooming) return;
 
+        // If we're already zoomed in, go back
         if (Animations.isZoomed) {
             Animations.zoomBack(camera, controls);
             Animations.isZoomed = false;
             return;
         }
 
+        // Create backup of current position
         Animations.setOriginalPosition(camera.position, controls.target);
         Animations.isZoomed = true;
 
+        // Get the object's world position
         const v = new THREE.Vector3();
-        model.getWorldPosition(v);
+        object.getWorldPosition(v);
 
-        // start focusing to it
+        // Start focusing to it
         Animations.isZooming = true;
         gsap.to(camera.position, {
-            x: v.x + 2,
-            y: v.y,
-            z: v.z,
+            x: v.x + offset.x,
+            y: v.y + offset.y,
+            z: v.z + offset.z,
             duration: 1,
             ease: "power1.inOut",
             onUpdate: () => {
@@ -71,7 +87,21 @@ export const Animations = {
             },
             onComplete: () => {
                 Animations.isZooming = false;
+                callback?.();
             },
         });
+    },
+
+    zoomPC: (camera, controls, model, afterZoom, beforeZoom) => {
+        Animations._beforeZoomBack = beforeZoom;
+        Animations.zoomedItem = "PC";
+
+        return Animations._zoomObject(
+            camera,
+            controls,
+            model,
+            { x: 2, y: 0, z: 0 },
+            afterZoom
+        );
     },
 };

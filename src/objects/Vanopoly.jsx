@@ -18,7 +18,7 @@ export default function Vanopoly(props) {
             if (!keepGoing) return;
             lightUp = !lightUp;
 
-            textRef.current.material.uniforms.uLightUp.value = lightUp;
+            textRef.current.material.uniforms.uLightUp.value = lightUp ? 1 : 0;
             setTimeout(toggleLight, Math.random() * BLINK_FREQUENCY);
         }
 

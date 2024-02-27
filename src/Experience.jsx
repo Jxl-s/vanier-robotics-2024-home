@@ -1,9 +1,5 @@
-import { Bounds, OrbitControls, Stage } from "@react-three/drei";
-
-import bakedVertex from "./shaders/baked.vert";
-import bakedFragment from "./shaders/baked.frag";
+import { OrbitControls, Stage } from "@react-three/drei";
 import { Scene } from "./Scene";
-import { useThree } from "@react-three/fiber";
 
 export default function Experience() {
     return <>
@@ -18,8 +14,8 @@ export default function Experience() {
             enablePan={false}
         />
         <axesHelper />
-        {/* <Bounds fit clip margin={1} maxDuration={1}> */}
+        <Stage environment={null}>
             <Scene scale={[4, 4, 4]} />
-        {/* </Bounds> */}
+        </Stage>
     </>
 }

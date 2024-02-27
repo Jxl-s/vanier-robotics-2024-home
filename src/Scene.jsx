@@ -68,9 +68,10 @@ export function Scene(props) {
         }}
       />
 
-      <PC geometry={nodes.PC.geometry} material={commonMaterial.clone()} position={[-0.659, -0.345, -0.092]} child={{
+      <PC geometry={nodes.PC.geometry} material={commonMaterial.clone()} position={[-0.659, -0.345, -0.092]} screen={{
         geometry: nodes.PCScreen.geometry,
-        position: [0.053, 0.015, 0.002]
+        position: [0.053, 0.015, 0.002],
+        material: commonMaterial.clone(),
       }} />
 
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />

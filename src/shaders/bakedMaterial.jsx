@@ -9,7 +9,7 @@ const BakedMaterial = shaderMaterial(
         uNightMix: 0,
         uTime: 0,
         uIsHovered: false,
-        uLightUp: false,
+        uLightUp: 0,
     },
     vertexShader,
     fragmentShader
