@@ -28,12 +28,24 @@ export default function Box({ geometry, material, position, rotation, cover }) {
 
     const onClick = () => {
         Animations.zoomBox(camera, controls, boxRef.current, () => {
+            gsap.to(coverRef.current.rotation, {
+                y: (1/16) * Math.PI,
+                duration: 1,
+                ease: "power1.inOut",
+            });
+
             gsap.to(coverRef.current.position, {
-                y: cover.position[1] + 0.025,
+                y: cover.position[1] + 0.05,
                 duration: 1,
                 ease: "power1.inOut",
             });
         }, (start) => {
+            gsap.to(coverRef.current.rotation, {
+                y: 0,
+                duration: 1,
+                ease: "power1.inOut",
+            });
+
             gsap.to(coverRef.current.position, {
                 y: cover.position[1],
                 duration: 1,
