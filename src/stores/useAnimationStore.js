@@ -54,9 +54,6 @@ export const useAnimationStore = create((set) => ({
         controls = controls ?? state.lastControls;
 
         // call the animate to function
-        console.log(state.positionBeforeAnimate);
-        console.log(state.lookAtBeforeAnimate);
-
         const success = await state.animateTo(camera, controls, state.positionBeforeAnimate, state.lookAtBeforeAnimate, { stepFactor: 1 });
 
         // reset the animation state

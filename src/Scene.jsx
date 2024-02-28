@@ -110,9 +110,10 @@ export function Scene(props) {
           text: "Progress Log #2",
           position: [0, 0.7, 0.3]
         }}
+        name="Shelves"
       />
       {/* <mesh geometry={nodes.Shelves.geometry} material={commonMaterial} position={[-0.231, -0.081, -1.154]} rotation={[0, Math.PI / 2, 0]} /> */}
-      
+
       <SimpleClickable props={{
         geometry: nodes.PaperRed.geometry,
         material: commonMaterial.clone(),
