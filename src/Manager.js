@@ -17,6 +17,24 @@ export const updateNightMix = (value, callback) => {
     });
 };
 
+class DeltaTime {
+    constructor() {
+        this.last = performance.now();
+        this.current = 0;
+        this.delta = 0;
+    }
+
+    update() {
+        this.current = performance.now();
+        this.delta = this.current - this.last;
+        this.last = this.current;
+    }
+
+    get() {
+        return this.delta / 1000;
+    }
+}
+
 export const Animations = {
     // Backup of the original camera position
     originalPosition: new THREE.Vector3(),
@@ -45,6 +63,8 @@ export const Animations = {
         Animations.zoomedItem = null;
         Animations._beforeZoomBack(() => {
             Animations._beforeZoomBack = null;
+
+            const deltaTime = new DeltaTime();
             gsap.to(camera.position, {
                 x: Animations.originalPosition.x,
                 y: Animations.originalPosition.y,
@@ -52,7 +72,11 @@ export const Animations = {
                 duration: 1,
                 ease: "power1.inOut",
                 onUpdate: () => {
-                    controls.target.lerp(Animations.originalLookAt, 0.02);
+                    deltaTime.update();
+                    controls.target.lerp(
+                        Animations.originalLookAt,
+                        deltaTime.get()
+                    );
                 },
                 onComplete: () => {
                     Animations.isZooming = false;
@@ -81,6 +105,8 @@ export const Animations = {
 
         // Start focusing to it
         Animations.isZooming = true;
+
+        const deltaTime = new DeltaTime();
         gsap.to(camera.position, {
             x: v.x + offset.x,
             y: v.y + offset.y,
@@ -88,7 +114,8 @@ export const Animations = {
             duration: 1,
             ease: "power1.inOut",
             onUpdate: () => {
-                controls.target.lerp(v, 0.1);
+                deltaTime.update();
+                controls.target.lerp(v, deltaTime.get() * 5);
             },
             onComplete: () => {
                 Animations.isZooming = false;
