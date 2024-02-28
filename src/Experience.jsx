@@ -4,8 +4,17 @@ import { Robot } from "./objects/Robot";
 import { Perf } from "r3f-perf";
 import { Suspense } from "react";
 import Progress from "./Progress";
+import { useFrame } from "@react-three/fiber";
+import { Materials } from "./Manager";
 
 export default function Experience() {
+    useFrame((_, delta) => {
+        // Handle all materials
+        Materials.forEach((material) => {
+            material.uniforms.uTime.value += delta;
+        });
+    });
+
     return <>
         <OrbitControls
             makeDefault={true}

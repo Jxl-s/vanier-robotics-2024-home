@@ -3,12 +3,15 @@ import { useEffect, useRef } from "react"
 import { Animations, registerMaterial } from "../Manager";
 import { onFrame, onHover, onLeave } from "./common";
 import HtmlLabel from "../components/HtmlLabel";
+import { useAnimationStore } from "../stores/useAnimationStore";
+import * as THREE from "three";
 
 // Anything that doesn't show any interesting animations
 export default function SimpleClickable({ props, cameraOffset, label }) {
     const modelRef = useRef();
 
     const { camera, controls } = useThree();
+    const animateTo = useAnimationStore((state) => state.animateTo);
 
     useEffect(() => {
         if (!modelRef.current) return;
@@ -16,25 +19,31 @@ export default function SimpleClickable({ props, cameraOffset, label }) {
 
     }, [modelRef]);
 
-    useFrame((_, delta) => {
-        onFrame(modelRef.current.material, delta);
-    });
+    const onHover = () => {
+        document.body.style.cursor = "pointer";
+        modelRef.current.material.uniforms.uIsHovered.value = true;
+    }
 
-    const _onHover = (e) => onHover(modelRef.current.material, e);
-    const _onLeave = (e) => onLeave(modelRef.current.material, e);
+    const onLeave = () => {
+        document.body.style.cursor = "auto";
+        modelRef.current.material.uniforms.uIsHovered.value = false;
+    }
 
-    const onClick = (e) => {
+    const onClick = async (e) => {
         e.stopPropagation();
-        console.log('clicked');
-        if (!Animations.zoomedItem) {
-            Animations._beforeZoomBack = (s) => s();
-            Animations.zoomedItem = "_";
-        }
 
-        Animations._zoomObject(camera, controls, modelRef.current, cameraOffset, () => { });
+        const modelPosition = new THREE.Vector3();
+        modelRef.current.getWorldPosition(modelPosition);
+
+        const targetPosition = modelPosition.clone();
+        targetPosition.x += cameraOffset.x;
+        targetPosition.y += cameraOffset.y;
+        targetPosition.z += cameraOffset.z;
+
+        await animateTo(camera, controls, targetPosition, modelPosition);
     };
 
-    return <mesh {...props} ref={modelRef} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
-        {label && <HtmlLabel {...label} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} />}
+    return <mesh {...props} ref={modelRef} onPointerEnter={onHover} onPointerLeave={onLeave} onClick={onClick}>
+        {label && <HtmlLabel {...label} onPointerEnter={onHover} onPointerLeave={onLeave} onClick={onClick} />}
     </mesh>
 }

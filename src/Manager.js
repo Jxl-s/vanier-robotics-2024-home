@@ -6,15 +6,25 @@ export const registerMaterial = (material) => {
     Materials.push(material);
 };
 
-export const updateNightMix = (value, callback) => {
-    Materials.forEach((material, i) => {
-        gsap.to(material.uniforms.uNightMix, {
-            value: value,
-            duration: 0.5,
-            ease: "power1.inOut",
-            onComplete: () => i == 0 && callback?.(),
+
+export const updateNightMix = (value, params = {}) => {
+    console.log('updateNightMix', value, params);
+    return new Promise((resolve) => {
+        if (Materials.length < 1) return resolve(false);
+
+        Materials.forEach((material, i) => {
+            if (!material.uniforms.uNightMix) return;
+
+            gsap.to(material.uniforms.uNightMix, {
+                value: value,
+                duration: params.duration ?? 0.5,
+                ease: params.ease ?? "power1.inOut",
+                onComplete: () => i == 0 && resolve(true),
+                onUpdate: () => console.log(material.uniforms.uNightMix.value)
+            });
         });
     });
+
 };
 
 class DeltaTime {
