@@ -2,7 +2,8 @@ varying vec2 vUv;
 
 uniform float uBrightness;
 uniform float uTime;
-uniform vec3 uColor;
+uniform vec3 uColorLow;
+uniform vec3 uColorHigh;
 
 vec4 permute(vec4 x) {
     return mod(((x * 34.0) + 1.0) * x, 289.0);
@@ -78,6 +79,6 @@ float snoise(vec3 v) {
 
 void main() {
     float noiseValue = snoise(vec3(vUv * 100.0, uTime * 0.5)) * 0.5;
-    vec3 color = uColor * noiseValue;
-    gl_FragColor = vec4(mix(color, uColor, uBrightness), 0.5);
+    vec3 color = mix(uColorLow, uColorHigh, noiseValue);
+    gl_FragColor = vec4(mix(color, uColorHigh, uBrightness), 0.5);
 }

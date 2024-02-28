@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { onFrame, onHover, onLeave } from "./common";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Animations, registerMaterial, updateNightMix } from "../Manager";
-import { Html, Sparkles } from "@react-three/drei";
+import { Cloud, Clouds, Html, Sparkles } from "@react-three/drei";
 import HtmlLabel from "../components/HtmlLabel";
 import * as THREE from "three";
 import gsap from "gsap";
@@ -18,7 +18,9 @@ export default function Projector({ geometry, material, position, screen }) {
         if (!screenRef.current) return;
 
         registerMaterial(frameRef.current.material);
-        screenRef.current.material.uniforms.uColor.value = new THREE.Color(0x6699FF);
+        screenRef.current.material.uniforms.uBrightness.value = 1;
+        screenRef.current.material.uniforms.uColorLow.value = new THREE.Color(0xffffff);
+        screenRef.current.material.uniforms.uColorHigh.value = new THREE.Color(0x5a5cb8);
     }, [frameRef]);
 
     useFrame((_, delta) => {
@@ -33,14 +35,15 @@ export default function Projector({ geometry, material, position, screen }) {
         e.stopPropagation();
         console.log('clicked projector');
         const zoomProjector = () => Animations.zoomProjector(camera, controls, screenRef.current, () => { }, (start) => {
-            gsap.to(screenRef.current.material.uniforms.uBrightness, { value: 0, duration: 1, ease: "power2.inOut" });
+            gsap.to(screenRef.current.material.uniforms.uBrightness, { value: 1, duration: 1, ease: "power2.inOut" });
             start();
         });
 
         if (!Animations.isZoomed) {
             updateNightMix(1, zoomProjector);
+            // sparklesRef.current.opacity = 1;
             gsap.to(screenRef.current.material.uniforms.uBrightness, {
-                value: 1, duration: 0.5, ease: "power2.inOut",
+                value: 0, duration: 0.5, ease: "power2.inOut",
             });
         } else {
             zoomProjector();
@@ -51,7 +54,7 @@ export default function Projector({ geometry, material, position, screen }) {
     };
 
     return <>
-        <Sparkles size={20} color={0x99B2FF} scale-z={0.5} opacity={0.5} position={position} />
+        <Sparkles size={10} count={100} scale={[1.4, 1.4, 0.1]} color={0xffffff} position={[position[0] + 0.1, position[1] + 0.1, position[2] + 0.05]} />
         <mesh geometry={geometry} material={material} position={position} ref={frameRef} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
             <mesh {...screen} ref={screenRef}>
                 <HtmlLabel text="Game Description & Robot" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.575, 0]} width="125px" />

@@ -7,7 +7,8 @@ const PCScreenMaterial = shaderMaterial(
     {
         uBrightness: 0,
         uTime: 0,
-        uColor: new THREE.Color(0xffffff),
+        uColorLow: new THREE.Color(0x000000),
+        uColorHigh: new THREE.Color(0xffffff),
     },
     vertexShader,
     fragmentShader
