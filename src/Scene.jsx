@@ -7,7 +7,6 @@ import { useGLTF, useTexture } from '@react-three/drei'
 import Chair from './objects/Chair';
 import Vanopoly from './objects/Vanopoly';
 import BakedMaterial from './shaders/bakedMaterial';
-import { registerMaterial } from './Manager';
 import { useMemo } from 'react';
 import TVScreen from './objects/TVScreen';
 import PC from './objects/PC';
@@ -16,6 +15,7 @@ import Box from './objects/Box';
 import Projector from './objects/Projector';
 import SimpleClickable from './objects/SimpleClickable';
 import * as THREE from "three";
+import { useMaterialStore } from './stores/useMaterialStore';
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
@@ -26,6 +26,7 @@ export function Scene(props) {
   const bakedNight = useTexture('/textures/bakedNight.jpg');
   bakedNight.flipY = false;
 
+  const registerMaterial = useMaterialStore((state) => state.registerMaterial);
   const commonMaterial = useMemo(() => {
     const newMaterial = new BakedMaterial({
       uTextureDay: bakedDay,
@@ -123,6 +124,7 @@ export function Scene(props) {
           text: "Captains",
           position: [0, 0.1, 0]
         }}
+        name="Red Paper"
       />
       {/* <mesh geometry={nodes.PaperRed.geometry} material={commonMaterial} position={[-0.989, 0.266, -0.068]} /> */}
 
@@ -137,6 +139,7 @@ export function Scene(props) {
           text: "About CRC",
           position: [0, 0.1, 0]
         }}
+        name="Yellow Paper"
       />
       {/* <mesh geometry={nodes.PaperYellow.geometry} material={commonMaterial} position={[-0.995, 0.124, -0.582]} /> */}
 
@@ -151,6 +154,7 @@ export function Scene(props) {
           text: "Credits",
           position: [0, 0, 0]
         }}
+        name="Gray Paper"
       />
       {/* <mesh geometry={nodes.PaperGray.geometry} material={commonMaterial} position={[-0.992, 0.017, -0.025]} /> */}
 
@@ -166,6 +170,7 @@ export function Scene(props) {
           text: "Progress Log #1",
           position: [0, 0.1, 0]
         }}
+        name="Secret Portfolio"
       />
 
       {/* <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} /> */}
@@ -176,6 +181,7 @@ export function Scene(props) {
       }}
         cameraOffset={{ x: -6, y: 4, z: 0 }}
         label={null}
+        name="Robot Mat"
       />
 
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />

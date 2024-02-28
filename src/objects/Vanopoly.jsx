@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react"
-import { registerMaterial } from "../Manager";
+import { useMaterialStore } from "../stores/useMaterialStore";
 
 const BLINK_FREQUENCY = 2000;
 
 export default function Vanopoly(props) {
     const textRef = useRef();
-
+    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
     useEffect(() => {
         if (!textRef.current) return;
         registerMaterial(textRef.current.material);

@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import { useVideoTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { useEffect, useMemo, useState } from 'react';

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react"
-import { Animations, registerMaterial } from "../Manager";
-import { extend, useFrame, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import HtmlLabel from "../components/HtmlLabel";
 import * as THREE from "three";
 import { useAnimationStore } from "../stores/useAnimationStore";
+import { useMaterialStore } from "../stores/useMaterialStore";
 
 export default function PC({ geometry, material, position, screen }) {
     const modelRef = useRef();
@@ -13,18 +13,23 @@ export default function PC({ geometry, material, position, screen }) {
     const { camera, controls } = useThree();
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
+    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
 
     useEffect(() => {
         if (!modelRef.current) return;
         registerMaterial(modelRef.current.material);
     }, [modelRef]);
 
-    const onHover = () => {
+    const onHover = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "pointer";
         modelRef.current.material.uniforms.uIsHovered.value = true;
     };
 
-    const onLeave = () => {
+    const onLeave = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "auto";
         modelRef.current.material.uniforms.uIsHovered.value = false;
     }
@@ -38,7 +43,7 @@ export default function PC({ geometry, material, position, screen }) {
         const targetPosition = modelPosition.clone();
         targetPosition.x += 2;
 
-        const success = await animateTo(camera, controls, targetPosition, modelPosition);
+        const success = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'PC' });
         if (success) {
             setLeaveEvent(() => {
                 gsap.to(screenRef.current.material.uniforms.uBrightness, {

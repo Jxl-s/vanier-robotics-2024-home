@@ -35,6 +35,11 @@ export const useAnimationStore = create((set) => ({
 
     // Animation state
     isAnimating: false,
+    focusedObject: '',
+
+    // References for the camera and the controls, to use outside of the store
+    lastCamera: undefined,
+    lastControls: undefined,
 
     setLeaveEvent: (callback) => {
         // call the previous function, before setting the new event
@@ -45,18 +50,26 @@ export const useAnimationStore = create((set) => ({
         const state = useAnimationStore.getState();
         if (state.isAnimating) return;
 
+        camera = camera ?? state.lastCamera;
+        controls = controls ?? state.lastControls;
+
         // call the animate to function
+        console.log(state.positionBeforeAnimate);
+        console.log(state.lookAtBeforeAnimate);
+
         const success = await state.animateTo(camera, controls, state.positionBeforeAnimate, state.lookAtBeforeAnimate, { stepFactor: 1 });
 
         // reset the animation state
         if (success) {
-            set({ isAnimating: false, positionBeforeAnimate: null, lookAtBeforeAnimate: null });
+            set({ isAnimating: false, positionBeforeAnimate: null, lookAtBeforeAnimate: null, focusedObject: '' });
         }
 
         return success;
     },
 
     animateTo: (camera, controls, position, lookAt, params = {}) => {
+        set({ lastCamera: camera, lastControls: controls });
+
         return new Promise((resolve) => {
             const state = useAnimationStore.getState();
             if (state.isAnimating) return resolve(false);
@@ -71,7 +84,11 @@ export const useAnimationStore = create((set) => ({
                 set({ positionBeforeAnimate: camera.position.clone(), lookAtBeforeAnimate: controls.target.clone() });
             }
 
-            set({ isAnimating: true });
+            if (!params.skipLeaveEvent) {
+                set({ isAnimating: true, focusedObject: '' });
+            } else {
+                set({ isAnimating: true });
+            }
 
             // Start animation
             const deltaTime = new DeltaTime();
@@ -87,7 +104,12 @@ export const useAnimationStore = create((set) => ({
                 },
 
                 onComplete: () => {
-                    set({ isAnimating: false });
+                    if (!params.skipLeaveEvent) {
+                        set({ isAnimating: false, focusedObject: params.name ?? '' });
+                    } else {
+                        set({ isAnimating: false });
+                    }
+
                     return resolve(true);
                 },
             });

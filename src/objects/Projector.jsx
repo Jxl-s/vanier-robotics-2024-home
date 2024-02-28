@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { registerMaterial, updateNightMix } from "../Manager";
+import { useEffect, useRef } from "react";
+import { useThree } from "@react-three/fiber";
 import { Sparkles } from "@react-three/drei";
 import HtmlLabel from "../components/HtmlLabel";
 import * as THREE from "three";
 import gsap from "gsap";
 import { useAnimationStore } from "../stores/useAnimationStore";
+import { useMaterialStore } from "../stores/useMaterialStore";
 
 export default function Projector({ geometry, material, position, screen }) {
     const frameRef = useRef();
@@ -15,6 +15,8 @@ export default function Projector({ geometry, material, position, screen }) {
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
 
+    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
+    const updateNightMix = useMaterialStore((state) => state.updateNightMix);
     useEffect(() => {
         if (!frameRef.current) return;
         if (!screenRef.current) return;
@@ -28,12 +30,16 @@ export default function Projector({ geometry, material, position, screen }) {
         screenRef.current.material.uniforms.uColorHigh.value = new THREE.Color(0x5a5cb8);
     }, [frameRef]);
 
-    const onHover = () => {
+    const onHover = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "pointer";
         frameRef.current.material.uniforms.uIsHovered.value = true;
     };
 
-    const onLeave = () => {
+    const onLeave = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "auto";
         frameRef.current.material.uniforms.uIsHovered.value = false;
     }
@@ -47,7 +53,7 @@ export default function Projector({ geometry, material, position, screen }) {
         const targetPosition = modelPosition.clone();
         targetPosition.z += 10;
 
-        const success = await animateTo(camera, controls, targetPosition, modelPosition);
+        const success = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'Projector' });
         if (success) {
             gsap.to(screenRef.current.material.uniforms.uBrightness, { value: 0, duration: 1, ease: "power2.inOut" });
 

@@ -1,17 +1,17 @@
-import { useFrame, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react"
-import { Animations, registerMaterial } from "../Manager";
-import { onFrame, onHover, onLeave } from "./common";
 import HtmlLabel from "../components/HtmlLabel";
 import { useAnimationStore } from "../stores/useAnimationStore";
 import * as THREE from "three";
+import { useMaterialStore } from "../stores/useMaterialStore";
 
 // Anything that doesn't show any interesting animations
-export default function SimpleClickable({ props, cameraOffset, label }) {
+export default function SimpleClickable({ props, cameraOffset, label, name }) {
     const modelRef = useRef();
 
     const { camera, controls } = useThree();
     const animateTo = useAnimationStore((state) => state.animateTo);
+    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
 
     useEffect(() => {
         if (!modelRef.current) return;
@@ -19,12 +19,16 @@ export default function SimpleClickable({ props, cameraOffset, label }) {
 
     }, [modelRef]);
 
-    const onHover = () => {
+    const onHover = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "pointer";
         modelRef.current.material.uniforms.uIsHovered.value = true;
     }
 
-    const onLeave = () => {
+    const onLeave = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "auto";
         modelRef.current.material.uniforms.uIsHovered.value = false;
     }
@@ -40,7 +44,7 @@ export default function SimpleClickable({ props, cameraOffset, label }) {
         targetPosition.y += cameraOffset.y;
         targetPosition.z += cameraOffset.z;
 
-        await animateTo(camera, controls, targetPosition, modelPosition);
+        await animateTo(camera, controls, targetPosition, modelPosition, { name: name ?? '' });
     };
 
     return <mesh {...props} ref={modelRef} onPointerEnter={onHover} onPointerLeave={onLeave} onClick={onClick}>

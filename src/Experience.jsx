@@ -5,12 +5,12 @@ import { Perf } from "r3f-perf";
 import { Suspense } from "react";
 import Progress from "./Progress";
 import { useFrame } from "@react-three/fiber";
-import { Materials } from "./Manager";
+import { useMaterialStore } from "./stores/useMaterialStore";
 
 export default function Experience() {
     useFrame((_, delta) => {
         // Handle all materials
-        Materials.forEach((material) => {
+        useMaterialStore.getState().materials.forEach((material) => {
             material.uniforms.uTime.value += delta;
         });
     });

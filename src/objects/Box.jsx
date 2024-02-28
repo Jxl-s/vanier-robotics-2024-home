@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react"
-import { registerMaterial } from "../Manager";
 import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import HtmlLabel from "../components/HtmlLabel";
 import { useAnimationStore } from "../stores/useAnimationStore";
 import * as THREE from "three";
+import { useMaterialStore } from "../stores/useMaterialStore";
 
 export default function Box({ geometry, material, position, rotation, cover }) {
     const boxRef = useRef();
@@ -13,6 +13,8 @@ export default function Box({ geometry, material, position, rotation, cover }) {
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
 
+    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
+
     const { camera, controls } = useThree();
 
     useEffect(() => {
@@ -20,12 +22,16 @@ export default function Box({ geometry, material, position, rotation, cover }) {
         registerMaterial(boxRef.current.material);
     }, [boxRef]);
 
-    const onHover = () => {
+    const onHover = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "pointer";
         boxRef.current.material.uniforms.uIsHovered.value = true;
     };
 
-    const onLeave = () => {
+    const onLeave = (e) => {
+        e.stopPropagation();
+
         document.body.style.cursor = "auto";
         boxRef.current.material.uniforms.uIsHovered.value = false;
     }
@@ -40,7 +46,7 @@ export default function Box({ geometry, material, position, rotation, cover }) {
         targetPosition.x += 3;
         targetPosition.y += 3;
 
-        const success = await animateTo(camera, controls, targetPosition, modelPosition);
+        const success = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'Box' });
         if (success) {
             setLeaveEvent(() => {
                 gsap.to(coverRef.current.rotation, {
