@@ -26,11 +26,12 @@ export default function Projector({ geometry, material, position, screen }) {
         onFrame(screenRef.current.material, delta);
     });
 
-    const _onHover = () => onHover(frameRef.current.material);
-    const _onLeave = () => onLeave(frameRef.current.material);
+    const _onHover = (e) => onHover(frameRef.current.material, e);
+    const _onLeave = (e) => onLeave(frameRef.current.material, e);
 
-    const onClick = () => {
-        console.log('[clicked]');
+    const onClick = (e) => {
+        e.stopPropagation();
+        console.log('clicked projector');
         const zoomProjector = () => Animations.zoomProjector(camera, controls, screenRef.current, () => { }, (start) => {
             gsap.to(screenRef.current.material.uniforms.uBrightness, { value: 0, duration: 1, ease: "power2.inOut" });
             start();
@@ -49,10 +50,12 @@ export default function Projector({ geometry, material, position, screen }) {
         }
     };
 
-    return <mesh geometry={geometry} material={material} position={position} ref={frameRef} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
-        <mesh {...screen} ref={screenRef}>
-            <Sparkles size={20} color={0x99B2FF} scale-z={0.5} opacity={0.5}/>
-            <HtmlLabel text="Game Description & Robot" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.575, 0]} width="125px" />
-        </mesh>
-    </mesh >
+    return <>
+        <Sparkles size={20} color={0x99B2FF} scale-z={0.5} opacity={0.5} position={position} />
+        <mesh geometry={geometry} material={material} position={position} ref={frameRef} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
+            <mesh {...screen} ref={screenRef}>
+                <HtmlLabel text="Game Description & Robot" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.575, 0]} width="125px" />
+            </mesh>
+        </mesh >
+    </>
 }

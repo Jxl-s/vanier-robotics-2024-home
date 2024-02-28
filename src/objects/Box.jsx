@@ -22,10 +22,11 @@ export default function Box({ geometry, material, position, rotation, cover }) {
         onFrame(boxRef.current.material, delta);
     });
 
-    const _onHover = () => onHover(boxRef.current.material);
-    const _onLeave = () => onLeave(boxRef.current.material);
+    const _onHover = (e) => onHover(boxRef.current.material, e);
+    const _onLeave = (e) => onLeave(boxRef.current.material, e);
 
-    const onClick = () => {
+    const onClick = (e) => {
+        e.stopPropagation();
         Animations.zoomBox(camera, controls, boxRef.current, () => {
             gsap.to(coverRef.current.rotation, {
                 y: (1 / 16) * Math.PI,

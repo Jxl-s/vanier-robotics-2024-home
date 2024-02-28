@@ -23,10 +23,11 @@ export default function PC({ geometry, material, position, screen }) {
         onFrame(screenRef.current.material, delta);
     });
 
-    const _onHover = () => onHover(modelRef.current.material);
-    const _onLeave = () => onLeave(modelRef.current.material);
+    const _onHover = (e) => onHover(modelRef.current.material, e);
+    const _onLeave = (e) => onLeave(modelRef.current.material, e);
 
-    const onClick = () => {
+    const onClick = (e) => {
+        e.stopPropagation();
         Animations.zoomPC(camera, controls, modelRef.current, () => {
             gsap.to(screenRef.current.material.uniforms.uBrightness, {
                 value: 1,

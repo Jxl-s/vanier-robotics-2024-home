@@ -20,16 +20,18 @@ export default function SimpleClickable({ props, cameraOffset, label }) {
         onFrame(modelRef.current.material, delta);
     });
 
-    const _onHover = () => onHover(modelRef.current.material);
-    const _onLeave = () => onLeave(modelRef.current.material);
+    const _onHover = (e) => onHover(modelRef.current.material, e);
+    const _onLeave = (e) => onLeave(modelRef.current.material, e);
 
-    const onClick = () => {
+    const onClick = (e) => {
+        e.stopPropagation();
+        console.log('clicked');
         if (!Animations.zoomedItem) {
             Animations._beforeZoomBack = (s) => s();
             Animations.zoomedItem = "_";
         }
 
-        Animations._zoomObject(camera, controls, modelRef.current, cameraOffset, () => {});
+        Animations._zoomObject(camera, controls, modelRef.current, cameraOffset, () => { });
     };
 
     return <mesh {...props} ref={modelRef} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
