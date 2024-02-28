@@ -18,6 +18,7 @@ export default function PC({ geometry, material, position, screen }) {
     useEffect(() => {
         if (!modelRef.current) return;
         registerMaterial(modelRef.current.material);
+        registerMaterial(screenRef.current.material);
     }, [modelRef]);
 
     const onHover = (e) => {
