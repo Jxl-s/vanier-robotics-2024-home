@@ -1,7 +1,9 @@
-import { Bounds, OrbitControls, Stage } from "@react-three/drei";
+import { Bounds, OrbitControls, Stage, useProgress } from "@react-three/drei";
 import { Scene } from "./Scene";
 import { Robot } from "./objects/Robot";
 import { Perf } from "r3f-perf";
+import { Suspense } from "react";
+import Progress from "./Progress";
 
 export default function Experience() {
     return <>
@@ -17,9 +19,13 @@ export default function Experience() {
         />
         <axesHelper />
         <Perf />
-        <Robot scale={[4, 4, 4]} />
+        <Suspense fallback={<Progress />}>
+            <Robot scale={[4, 4, 4]} />
+        </Suspense>
         <Bounds fit observe margin={1}>
-            <Scene scale={[4, 4, 4]} />
+            <Suspense fallback={<Progress />}>
+                <Scene scale={[4, 4, 4]} />
+            </Suspense>
         </Bounds>
     </>
 }
