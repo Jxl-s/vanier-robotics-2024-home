@@ -10,6 +10,6 @@ export default function Progress() {
         width: "400px",
         textAlign: "center"
     }}>
-        {progress} % loaded
+        {Math.floor(progress)} % loaded
     </h1></Html>
 }

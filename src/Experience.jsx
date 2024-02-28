@@ -19,13 +19,11 @@ export default function Experience() {
         />
         <axesHelper />
         <Perf />
+        <Robot scale={[4, 4, 4]} />
         <Suspense fallback={<Progress />}>
-            <Robot scale={[4, 4, 4]} />
-        </Suspense>
-        <Bounds fit observe margin={1}>
-            <Suspense fallback={<Progress />}>
+            <Bounds fit observe margin={1}>
                 <Scene scale={[4, 4, 4]} />
-            </Suspense>
-        </Bounds>
+            </Bounds>
+        </Suspense>
     </>
 }
