@@ -29,7 +29,7 @@ export default function Experience() {
         <axesHelper />
         <Perf />
         <Robot scale={[4, 4, 4]} />
-        <Stars radius={25} depth={50} count={500} factor={5} saturation={0} fade speed={2} />
+        <Stars radius={1} depth={50} count={500} factor={5} saturation={1} fade speed={2} />
 
         {/* Progressivly load the scene */}
         <Suspense fallback={<Progress />}>
