@@ -38,12 +38,9 @@ export default function Projector({ geometry, material, position, screen }) {
 
         if (!Animations.isZoomed) {
             updateNightMix(1, zoomProjector);
-
-            setTimeout(() => {
-                gsap.to(screenRef.current.material.uniforms.uBrightness, {
-                    value: 1, duration: 0.5, ease: "power2.inOut",
-                });
-            }, 500);
+            gsap.to(screenRef.current.material.uniforms.uBrightness, {
+                value: 1, duration: 0.5, ease: "power2.inOut",
+            });
         } else {
             zoomProjector();
             setTimeout(() => {

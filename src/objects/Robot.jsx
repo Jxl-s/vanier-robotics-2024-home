@@ -101,4 +101,4 @@ export function Robot(props) {
   )
 }
 
-useGLTF.preload('/other.glb')
+useGLTF.preload('/models/other.glb')

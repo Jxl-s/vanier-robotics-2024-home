@@ -185,4 +185,4 @@ export function Scene(props) {
   )
 }
 
-useGLTF.preload('/scene.glb')
+useGLTF.preload('/models/scene.glb')
