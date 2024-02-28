@@ -10,7 +10,7 @@ export const updateNightMix = (value, callback) => {
     Materials.forEach((material, i) => {
         gsap.to(material.uniforms.uNightMix, {
             value: value,
-            duration: 0.2,
+            duration: 0.5,
             ease: "power1.inOut",
             onComplete: () => i == 0 && callback?.(),
         });
