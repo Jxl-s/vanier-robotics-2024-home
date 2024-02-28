@@ -13,12 +13,12 @@ export default function Experience() {
             // maxAzimuthAngle={Math.PI / 2}
             rotateSpeed={0.5}
             zoomSpeed={1}
-            // enablePan={false}
+        // enablePan={false}
         />
         <axesHelper />
         <Perf />
-        <Robot scale={[4, 4, 4]}/>
-        <Bounds fit observe margin={1} >
+        <Robot scale={[4, 4, 4]} />
+        <Bounds fit observe margin={1}>
             <Scene scale={[4, 4, 4]} />
         </Bounds>
     </>

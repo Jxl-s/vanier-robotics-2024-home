@@ -38,10 +38,10 @@ export function Robot(props) {
   const backLeftWheel = useRef();
 
   const movementPositions = useMemo(() => [
-    [1.5, -0.815, 0],
-    [1.5, -0.815, 0.725],
-    [2, -0.815, 0.725],
-    [2, -0.815, 0]
+    [1.5, -0.83, 0],
+    [1.5, -0.83, 0.725],
+    [2, -0.83, 0.725],
+    [2, -0.83, 0]
   ], []);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export function Robot(props) {
   return (
     <group {...props} dispose={null}>
       <mesh geometry={nodes.Plane.geometry} material={matcapMaterial} position={movementPositions[0]} ref={robotRef}>
-        <Shadow position-y={-0.18} position-x={0.005} position-z={0.005} scale={0.4} opacity={0.3}/>
+        <Shadow position-y={-0.16} position-x={0.005} position-z={0.005} scale={0.4} opacity={0.3}/>
         <RobotWheel ref={backRightWheel} position={[0.12, -0.138, 0.12]} inGeometry={nodes.Cylinder_1.geometry} inMaterial={wheelInMaterial} outGeometry={nodes.Cylinder_2.geometry} outMaterial={wheelOutMaterial} />
         <RobotWheel ref={frontRightWheel} position={[0.12, -0.138, -0.12]} inGeometry={nodes.Cylinder_1.geometry} inMaterial={wheelInMaterial} outGeometry={nodes.Cylinder_2.geometry} outMaterial={wheelOutMaterial} />
         <RobotWheel ref={frontLeftWheel} position={[-0.0925, -0.138, -0.12]} inGeometry={nodes.Cylinder_1.geometry} inMaterial={wheelInMaterial} outGeometry={nodes.Cylinder_2.geometry} outMaterial={wheelOutMaterial} />
