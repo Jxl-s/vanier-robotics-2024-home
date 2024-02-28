@@ -22,10 +22,16 @@ export default function Experience() {
         <Robot scale={[4, 4, 4]} />
         <Stars radius={25} depth={50} count={500} factor={5} saturation={0} fade speed={2} />
 
+        {/* Progressivly load the scene */}
         <Suspense fallback={<Progress />}>
-            <Bounds fit observe margin={0.9}>
-                <Scene scale={[4, 4, 4]} />
-            </Bounds>
+            <Scene scale={[4, 4, 4]} />
         </Suspense>
+
+        {/* Center the camera, use a custom bounding box */}
+        <Bounds fit observe margin={0.9}>
+            <mesh position={[2.5, -2, -0.5]} visible={false}>
+                <boxGeometry args={[14, 4, 10]} />
+            </mesh>
+        </Bounds>
     </>
 }
