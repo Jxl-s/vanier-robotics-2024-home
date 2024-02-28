@@ -165,11 +165,18 @@ export function Scene(props) {
       />
 
       {/* <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} /> */}
-      
+      <SimpleClickable props={{
+        geometry: nodes.Mat.geometry,
+        material: commonMaterial.clone(),
+        position: [1.768, -0.996, 0.36],
+      }}
+        cameraOffset={{ x: -6, y: 4, z: 0 }}
+        label={null}
+      />
+
       <mesh geometry={nodes.Around.geometry} material={commonMaterial} position={[0.468, -0.17, -0.294]} />
       <mesh geometry={nodes.Decor.geometry} material={commonMaterial} position={[-0.154, -0.818, -0.039]} rotation={[Math.PI, -0.278, Math.PI]} />
       <mesh geometry={nodes.TV1.geometry} material={commonMaterial} position={[0.371, 0.785, -0.766]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
-      <mesh geometry={nodes.Mat.geometry} material={commonMaterial} position={[1.768, -0.996, 0.36]} />
 
     </group >
   )

@@ -33,6 +33,6 @@ export default function SimpleClickable({ props, cameraOffset, label }) {
     };
 
     return <mesh {...props} ref={modelRef} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
-        <HtmlLabel {...label} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} />
+        {label && <HtmlLabel {...label} onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} />}
     </mesh>
 }
