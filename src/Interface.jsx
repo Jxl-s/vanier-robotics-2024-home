@@ -9,7 +9,7 @@ export default function Interface() {
         <div style={{ padding: '1em' }}>
             {focusedObject && <h1>Current focus: {focusedObject}</h1>}
             {/* {isAnimating && !focusedObject && <h1>Moving...</h1>} */}
-            {!isAnimating && !focusedObject && <h1>Click on something object</h1>}
+            {!isAnimating && !focusedObject && <h1>Click on something</h1>}
             {focusedObject && <button onClick={() => animateBack()}>Go Back</button>}
         </div>
     </div>
