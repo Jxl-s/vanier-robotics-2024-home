@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { useFrame } from '@react-three/fiber';
 import gsap from 'gsap';
 
-const RobotWheel = forwardRef(({ position, rotation, inGeometry, inMaterial, outGeometry, outMaterial }, ref) => {
+const RobotWheel = forwardRef(({ position, inGeometry, inMaterial, outGeometry, outMaterial }, ref) => {
   return <group position={position} rotation={[0, Math.PI / 2, 0]} ref={ref}>
     <mesh geometry={inGeometry} material={inMaterial} />
     <mesh geometry={outGeometry} material={outMaterial} />

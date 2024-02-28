@@ -57,7 +57,7 @@ export default function Box({ geometry, material, position, rotation, cover }) {
     return <>
         <mesh geometry={geometry} material={material} position={position} rotation={rotation} ref={boxRef} onPointerOver={_onHover} onPointerLeave={_onLeave} onClick={onClick}>
             <mesh material={material} ref={coverRef} {...cover} />
-            <HtmlLabel text="Box" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.25, 0]} width="25px" />
+            <HtmlLabel text="Experience Documentation" onPointerEnter={_onHover} onPointerLeave={_onLeave} onClick={onClick} position={[0, 0.25, 0]} width="120px" />
         </mesh>
     </>
 }

@@ -15,6 +15,7 @@ import PCScreenMaterial from './shaders/pcScreenMaterial';
 import Box from './objects/Box';
 import Projector from './objects/Projector';
 import SimpleClickable from './objects/SimpleClickable';
+import * as THREE from "three";
 
 export function Scene(props) {
   const { nodes } = useGLTF('/models/scene.glb')
@@ -40,6 +41,7 @@ export function Scene(props) {
   const pcScreenMaterial = useMemo(() => new PCScreenMaterial({
     uBrightness: 0,
     uTime: 0,
+    uColor: new THREE.Color(0xffffff),
   }), []);
 
   return (
@@ -90,6 +92,7 @@ export function Scene(props) {
 
       <Projector geometry={nodes.Projector.geometry} material={commonMaterial.clone()} position={[1.537, -0.347, -1.339]} screen={{
         geometry: nodes.ProjectorScreen.geometry,
+        material: pcScreenMaterial.clone(),
         position: [0.091, 0.096, -0.001]
       }} />
 
@@ -101,8 +104,8 @@ export function Scene(props) {
       }}
         cameraOffset={{ x: 5, y: 0, z: 5 }}
         label={{
-          width: "50px",
-          text: "Shelves",
+          width: "75px",
+          text: "Progress Log #2",
           position: [0, 0.7, 0.3]
         }}
       />
@@ -144,7 +147,7 @@ export function Scene(props) {
         cameraOffset={{ x: 1.5, y: 0, z: 0 }}
         label={{
           width: "50px",
-          text: "Sponsors",
+          text: "Credits",
           position: [0, 0, 0]
         }}
       />
@@ -158,8 +161,8 @@ export function Scene(props) {
       }}
         cameraOffset={{ x: 1, y: 1, z: 1 }}
         label={{
-          width: "50px",
-          text: "Portfolio",
+          width: "75px",
+          text: "Progress Log #1",
           position: [0, 0.1, 0]
         }}
       />
