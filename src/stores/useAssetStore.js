@@ -13,8 +13,7 @@ export const ALL_ASSETS = [
     { type: 'texture', path: '/textures/bakedNight.jpg', name: 'bakedNightTexture' },
     { type: 'texture', path: '/textures/matcap.png', name: 'matcapTexture' },
 
-    { type: 'video', path: '/videos/camera_1.mp4' },
-    { type: 'video', path: '/videos/camera_2.mp4' },
+    { type: 'video', path: '/videos/security_camera.mp4' },
 ]
 
 export const useAssetStore = create((set) => ({

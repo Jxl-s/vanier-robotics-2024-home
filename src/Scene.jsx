@@ -70,7 +70,7 @@ export function Scene(props) {
         }}
       />
 
-      <TVScreen position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} video="/videos/camera_2.mp4"
+      <TVScreen position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} video="/videos/security_camera.mp4"
         powerProps={{
           geometry: nodes.TV2Power.geometry,
           position: [2.008, 0.561, -1.312],
@@ -106,7 +106,8 @@ export function Scene(props) {
         position: [-0.231, -0.081, -1.154],
         rotation: [0, Math.PI / 2, 0]
       }}
-        cameraOffset={{ x: 5, y: 0, z: 5 }}
+        objectOffset={{ x: 1, y: 0, z: 0 }}
+        cameraOffset={{ x: 0, y: 2, z: 5 }}
         label={{
           width: "75px",
           text: "Progress Log #2",

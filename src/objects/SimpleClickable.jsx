@@ -5,7 +5,8 @@ import * as THREE from "three";
 import { useMaterialStore } from "../stores/useMaterialStore";
 
 // Anything that doesn't show any interesting animations
-export default function SimpleClickable({ props, cameraOffset, label, name }) {
+export default function SimpleClickable({ props, cameraOffset, objectOffset, label, name }) {
+    objectOffset = objectOffset ?? { x: 0, y: 0, z: 0 };
     const modelRef = useRef();
 
     const animateTo = useAnimationStore((state) => state.animateTo);
@@ -36,6 +37,10 @@ export default function SimpleClickable({ props, cameraOffset, label, name }) {
 
         const modelPosition = new THREE.Vector3();
         modelRef.current.getWorldPosition(modelPosition);
+
+        modelPosition.x += objectOffset.x;
+        modelPosition.y += objectOffset.y;
+        modelPosition.z += objectOffset.z;
 
         const targetPosition = modelPosition.clone();
         targetPosition.x += cameraOffset.x;
