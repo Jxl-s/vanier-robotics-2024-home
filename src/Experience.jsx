@@ -3,7 +3,6 @@ import { Scene } from "./Scene";
 import { Robot } from "./objects/Robot";
 import { Perf } from "r3f-perf";
 import { Suspense, useEffect } from "react";
-import Progress from "./Progress";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMaterialStore } from "./stores/useMaterialStore";
 import { useAnimationStore } from "./stores/useAnimationStore";
@@ -39,7 +38,7 @@ export default function Experience() {
         // enablePan={false}
         />
         <axesHelper />
-        <Perf />
+        {window.location.hash === "#debug" && <Perf />}
         <Stars radius={1} depth={50} count={500} factor={5} saturation={1} fade speed={2} />
 
         {/* Progressivly load the scene */}

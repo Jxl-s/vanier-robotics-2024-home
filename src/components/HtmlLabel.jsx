@@ -16,7 +16,7 @@ export default function HtmlLabel({ text, position, width, onPointerEnter, onPoi
         }
     }, [ref, focusedObject, isAnimating]);
 
-    return <Html center distanceFactor={20} position={position}>
+    return <Html center distanceFactor={20} position={position} zIndexRange={[1, 9]}>
         <div style={{
             color: "white",
             fontFamily: "monospace",

@@ -66,7 +66,7 @@ export default function TVScreen({
     return <>
         {isYoutube ?
             <>
-                <Html position={position} rotation={rotation} material={tvMaterial} transform center distanceFactor={0.5}>
+                <Html position={position} rotation={rotation} material={tvMaterial} transform center distanceFactor={0.5} zIndexRange={[1, 9]}>
                     <iframe
                         src={'https://www.youtube.com' + video + '?autoplay=1&mute=1&controls=0'}
                         title="YouTube"

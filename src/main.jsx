@@ -5,9 +5,11 @@ import Experience from './Experience.jsx'
 import { Canvas } from '@react-three/fiber'
 import Interface from './Interface.jsx'
 import Loading from './Loading.jsx'
+import LoadingInterface from './LoadingInterface.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <LoadingInterface />
     <Interface />
     <Canvas camera={{
       position: [5, 2, 10],
