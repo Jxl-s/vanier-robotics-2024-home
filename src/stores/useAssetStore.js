@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import { create } from "zustand";
 
-const ALL_ASSETS = [
+export const ALL_ASSETS = [
     { type: 'model', path: '/models/other.glb', name: 'otherModel' },
     { type: 'model', path: '/models/scene.glb', name: 'sceneModel' },
 
