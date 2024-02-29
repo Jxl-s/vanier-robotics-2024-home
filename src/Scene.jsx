@@ -55,12 +55,13 @@ export function Scene(props) {
       {/* <mesh geometry={nodes.TV1Screen.geometry} material={commonMaterial} position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} /> */}
       {/* <mesh geometry={nodes.TV2Screen.geometry} material={commonMaterial} position={[1.636, 0.83, -1.283]} rotation={[0.175, 0, 0]} /> */}
 
-      <TVScreen position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} video="/videos/camera_1.mp4"
+      <TVScreen position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} video="/embed/tgbNymZ7vqY"
         powerProps={{
           geometry: nodes.TV1Power.geometry,
           position: [-0.898, 0.561, -0.6],
           rotation: [Math.PI / 2, 1.396, -Math.PI / 2]
         }}
+        isYoutube={true}
         lightProps={{
           geometry: nodes.TV1Light.geometry,
           position: [-0.898, 0.561, -0.555],
