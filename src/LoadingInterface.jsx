@@ -20,9 +20,14 @@ export default function LoadingInterface() {
     }, [isLoaded, divRef, videoEnded]);
 
     const startExperience = () => {
-        gsap.to(divRef.current, {
-            opacity: 0, duration: 1, onComplete: () => {
-                divRef.current.style.display = "none";
+        // first lerp the children to 0
+        gsap.to(divRef.current.children, {
+            opacity: 0, duration: 0.5, onComplete: () => {
+                gsap.to(divRef.current, {
+                    opacity: 0, duration: 1, onComplete: () => {
+                        divRef.current.style.display = "none";
+                    }
+                });
             }
         });
     }
