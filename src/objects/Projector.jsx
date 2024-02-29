@@ -53,22 +53,23 @@ export default function Projector({ geometry, material, position, screen }) {
         const targetPosition = modelPosition.clone();
         targetPosition.z += 10;
 
-        const success = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'Projector' });
+        const success = await animateTo(camera, controls, targetPosition, modelPosition, );
         if (success) {
             gsap.to(screenRef.current.material.uniforms.uBrightness, { value: 0, duration: 1, ease: "power2.inOut" });
 
-            setLeaveEvent(() => {
-                gsap.to(screenRef.current.material.uniforms.uBrightness, {
-                    value: 1, duration: 1, ease: "power2.inOut",
-                    onComplete: () => updateNightMix(0, { duration: 0.5 })
-                });
-            });
-
-            await updateNightMix(1, { duration: 1 });
+            updateNightMix(1, { duration: 0.5 });
 
             // Get even closer
             targetPosition.z -= 5;
-            await animateTo(camera, controls, targetPosition, modelPosition, { skipLeaveEvent: true });
+            const secondSuccess = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'Projector' });
+            if (secondSuccess) {
+                setLeaveEvent(() => {
+                    gsap.to(screenRef.current.material.uniforms.uBrightness, {
+                        value: 1, duration: 1, ease: "power2.inOut",
+                        onComplete: () => updateNightMix(0, { duration: 0.5 })
+                    });
+                });
+            }
         }
     };
 
