@@ -1,21 +1,23 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ALL_ASSETS, useAssetStore } from "./stores/useAssetStore"
+import gsap from "gsap";
 
 export default function LoadingInterface() {
     const isLoaded = useAssetStore((state) => state.isLoaded);
     const loadedCount = useAssetStore((state) => state.loadedCount);
+
     const divRef = useRef();
+    const welcomeRef = useRef();
+
+    const [videoEnded, setVideoEnded] = useState(false);
 
     useEffect(() => {
-        if (isLoaded && divRef.current) {
-            setTimeout(() => {
-                divRef.current.style.opacity = 0;
-                setTimeout(() => {
-                    divRef.current.style.display = "none";
-                }, 1000);
-            }, 1000);
+        if (isLoaded && welcomeRef.current && videoEnded) {
+            gsap.to(welcomeRef.current.style, {
+                opacity: 1, duration: 1
+            });
         }
-    }, [isLoaded, divRef]);
+    }, [isLoaded, divRef, videoEnded]);
 
     return <div ref={divRef} style={{
         width: "100%",
@@ -23,16 +25,23 @@ export default function LoadingInterface() {
         position: "fixed",
         zIndex: 20,
         fontFamily: "monospace",
-        backgroundColor: "#bd3c4b",
+        backgroundColor: "rgb(210, 56, 58)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        transition: "opacity 1s"
     }}>
         {/* Loading stuff */}
         <div style={{ textAlign: 'center', color: 'white' }}>
-            <h1>{loadedCount} / {ALL_ASSETS.length} assets loaded</h1>
-            {loadedCount === ALL_ASSETS.length && <h2>Starting experience...</h2>}
+            <video width={'100%'} height={'200px'} autoPlay onEnded={() => setVideoEnded(true)}>
+                <source src="./videos/vanopoly.mp4" type="video/mp4" />
+            </video>
+
+
+            {isLoaded && videoEnded ? <div style={{ opacity: 0 }} ref={welcomeRef}>
+                <h1>Welcome to Vanopoly</h1>
+                <button>Starting Experience</button>
+            </div> : <h1>{loadedCount} / {ALL_ASSETS.length} assets loaded</h1>
+            }
         </div>
     </div>
 }
