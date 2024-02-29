@@ -76,14 +76,16 @@ export function startLoading() {
                 // Load video through normal javascript
                 const video = document.createElement('video');
                 video.src = asset.path;
-                video.preload = 'auto';
-                video.crossOrigin = 'anonymous';
+                video.crossOrigin = "Anonymous";
                 video.loop = true;
+                video.playsInline = true;
                 video.muted = true;
                 video.autoplay = true;
 
                 video.addEventListener('loadedmetadata', () => {
                     const videoTexture = new THREE.VideoTexture(video);
+                    video.play();
+
                     incrementLoaded(asset, videoTexture);
                 });
 

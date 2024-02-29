@@ -66,9 +66,9 @@ export default function TVScreen({
     return <>
         {isYoutube ?
             <>
-                <Html position={[position[0] + 0.01, position[1], position[2]]} rotation={rotation} material={tvMaterial} transform center distanceFactor={0.5} zIndexRange={[1, 9]}>
+                <Html position={[position[0] + 0.01, position[1], position[2]]} rotation={rotation} material={tvMaterial} transform center distanceFactor={0.5} zIndexRange={[1, 9]} pointerEvents="none" >
                     <iframe
-                        src={'https://www.youtube.com' + video + '?autoplay=1&mute=1&controls=0'}
+                        src={`https://www.youtube.com/embed/${video}?autoplay=1&loop=1&mute=1&controls=0&playlist=${video}`}
                         title="YouTube"
                         // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         style={{
@@ -76,7 +76,8 @@ export default function TVScreen({
                             width: "660px",
                             border: "none",
                             pointerEvents: "none",
-                            display: "block"
+                            display: "block",
+                            userSelect: "none",
                         }}
                         ref={iframeRef}
                         anonymous="true"

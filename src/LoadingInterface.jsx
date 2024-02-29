@@ -8,9 +8,9 @@ export default function LoadingInterface() {
 
     const divRef = useRef();
     const welcomeRef = useRef();
+    const videoRef = useRef();
 
     const [videoEnded, setVideoEnded] = useState(false);
-    const [autoplayEnabled, setAutoplayEnabled] = useState(true);
 
     useEffect(() => {
         if (isLoaded && welcomeRef.current && videoEnded) {
@@ -21,17 +21,8 @@ export default function LoadingInterface() {
     }, [isLoaded, divRef, videoEnded]);
 
     useEffect(() => {
-        const video = document.createElement('video');
-        const promise = video.play();
-
-        if (promise !== undefined) {
-            promise.then(() => {
-                setAutoplayEnabled(true);
-            }).catch(() => {
-                setAutoplayEnabled(false);
-                setVideoEnded(true);
-            });
-        }
+        // If we can't play the video, say it's finished
+        videoRef.current.play().catch(() => setVideoEnded(true));
     }, []);
 
     const startExperience = () => {
@@ -60,11 +51,12 @@ export default function LoadingInterface() {
     }}>
         {/* Loading stuff */}
         <div style={{ textAlign: 'center', color: 'white' }}>
-            {autoplayEnabled ? <video width={'100%'} height={'200px'} autoPlay onEnded={() => setVideoEnded(true)}>
-                <source src="./videos/vanopoly.mp4" type="video/mp4" />
-            </video> : <h1>Allow 'Autoplay' for a better experience</h1>
-            }
-
+            <video width={'100%'} height={'200px'} autoPlay={true} muted={true} playsInline={true} onEnded={() => setVideoEnded(true)} ref={videoRef} style={{
+                // add some drop shadow
+                filter: "drop-shadow(0 0 16px rgba(0, 0, 0, 1))"
+            }}>
+                <source src="/videos/vanopoly.mp4" type="video/mp4" />
+            </video>
 
             {isLoaded && videoEnded ? <div style={{ opacity: 0 }} ref={welcomeRef}>
                 <h1>Welcome to Vanopoly</h1>
