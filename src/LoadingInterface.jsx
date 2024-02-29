@@ -19,6 +19,14 @@ export default function LoadingInterface() {
         }
     }, [isLoaded, divRef, videoEnded]);
 
+    const startExperience = () => {
+        gsap.to(divRef.current, {
+            opacity: 0, duration: 1, onComplete: () => {
+                divRef.current.style.display = "none";
+            }
+        });
+    }
+
     return <div ref={divRef} style={{
         width: "100%",
         height: "100%",
@@ -39,7 +47,7 @@ export default function LoadingInterface() {
 
             {isLoaded && videoEnded ? <div style={{ opacity: 0 }} ref={welcomeRef}>
                 <h1>Welcome to Vanopoly</h1>
-                <button>Starting Experience</button>
+                <button onClick={() => startExperience()}>Start Experience</button>
             </div> : <h1>{loadedCount} / {ALL_ASSETS.length} assets loaded</h1>
             }
         </div>
