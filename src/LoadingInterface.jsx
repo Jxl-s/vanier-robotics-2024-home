@@ -19,6 +19,12 @@ export default function LoadingInterface() {
         }
     }, [isLoaded, divRef, videoEnded]);
 
+    useEffect(() => {
+        if (navigator.getAutoplayPolicy("mediaelement") !== "allowed") {
+            setVideoEnded(true);
+        }
+    }, []);
+
     const startExperience = () => {
         // first lerp the children to 0
         gsap.to(divRef.current.children, {
@@ -45,9 +51,10 @@ export default function LoadingInterface() {
     }}>
         {/* Loading stuff */}
         <div style={{ textAlign: 'center', color: 'white' }}>
-            <video width={'100%'} height={'200px'} autoPlay onEnded={() => setVideoEnded(true)}>
+            {navigator.getAutoplayPolicy("mediaelement") === "allowed" ? <video width={'100%'} height={'200px'} autoPlay onEnded={() => setVideoEnded(true)}>
                 <source src="./videos/vanopoly.mp4" type="video/mp4" />
-            </video>
+            </video> : <h1>Allow 'Autoplay' for a better experience</h1>
+            }
 
 
             {isLoaded && videoEnded ? <div style={{ opacity: 0 }} ref={welcomeRef}>
