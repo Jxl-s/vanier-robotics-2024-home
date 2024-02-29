@@ -10,6 +10,7 @@ export default function LoadingInterface() {
     const welcomeRef = useRef();
 
     const [videoEnded, setVideoEnded] = useState(false);
+    const [autoplayEnabled, setAutoplayEnabled] = useState(true);
 
     useEffect(() => {
         if (isLoaded && welcomeRef.current && videoEnded) {
@@ -20,8 +21,16 @@ export default function LoadingInterface() {
     }, [isLoaded, divRef, videoEnded]);
 
     useEffect(() => {
-        if (navigator.getAutoplayPolicy("mediaelement") !== "allowed") {
-            setVideoEnded(true);
+        const video = document.createElement('video');
+        const promise = video.play();
+
+        if (promise !== undefined) {
+            promise.then(() => {
+                setAutoplayEnabled(true);
+            }).catch(() => {
+                setAutoplayEnabled(false);
+                setVideoEnded(true);
+            });
         }
     }, []);
 
@@ -51,7 +60,7 @@ export default function LoadingInterface() {
     }}>
         {/* Loading stuff */}
         <div style={{ textAlign: 'center', color: 'white' }}>
-            {navigator.getAutoplayPolicy("mediaelement") === "allowed" ? <video width={'100%'} height={'200px'} autoPlay onEnded={() => setVideoEnded(true)}>
+            {autoplayEnabled ? <video width={'100%'} height={'200px'} autoPlay onEnded={() => setVideoEnded(true)}>
                 <source src="./videos/vanopoly.mp4" type="video/mp4" />
             </video> : <h1>Allow 'Autoplay' for a better experience</h1>
             }
