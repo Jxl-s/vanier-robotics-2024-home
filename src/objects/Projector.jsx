@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useThree } from "@react-three/fiber";
 import { Sparkles } from "@react-three/drei";
 import HtmlLabel from "../components/HtmlLabel";
 import * as THREE from "three";
@@ -11,7 +10,6 @@ export default function Projector({ geometry, material, position, screen }) {
     const frameRef = useRef();
     const screenRef = useRef();
 
-    const { camera, controls } = useThree();
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
 
@@ -53,7 +51,7 @@ export default function Projector({ geometry, material, position, screen }) {
         const targetPosition = modelPosition.clone();
         targetPosition.z += 10;
 
-        const success = await animateTo(camera, controls, targetPosition, modelPosition, );
+        const success = await animateTo(targetPosition, modelPosition, );
         if (success) {
             gsap.to(screenRef.current.material.uniforms.uBrightness, { value: 0, duration: 1, ease: "power2.inOut" });
 
@@ -61,7 +59,7 @@ export default function Projector({ geometry, material, position, screen }) {
 
             // Get even closer
             targetPosition.z -= 5;
-            const secondSuccess = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'Projector' });
+            const secondSuccess = await animateTo(targetPosition, modelPosition, { name: 'Projector' });
             if (secondSuccess) {
                 setLeaveEvent(() => {
                     gsap.to(screenRef.current.material.uniforms.uBrightness, {

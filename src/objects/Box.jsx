@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react"
-import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import HtmlLabel from "../components/HtmlLabel";
 import { useAnimationStore } from "../stores/useAnimationStore";
@@ -12,10 +11,7 @@ export default function Box({ geometry, material, position, rotation, cover }) {
 
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
-
     const registerMaterial = useMaterialStore((state) => state.registerMaterial);
-
-    const { camera, controls } = useThree();
 
     useEffect(() => {
         if (!boxRef.current) return;
@@ -46,7 +42,7 @@ export default function Box({ geometry, material, position, rotation, cover }) {
         targetPosition.x += 3;
         targetPosition.y += 3;
 
-        const success = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'Box' });
+        const success = await animateTo(targetPosition, modelPosition, { name: 'Box' });
         if (success) {
             setLeaveEvent(() => {
                 gsap.to(coverRef.current.rotation, {

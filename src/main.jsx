@@ -4,6 +4,7 @@ import './index.css'
 import Experience from './Experience.jsx'
 import { Canvas } from '@react-three/fiber'
 import Interface from './Interface.jsx'
+import Loading from './Loading.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

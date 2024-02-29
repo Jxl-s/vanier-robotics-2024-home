@@ -2,6 +2,7 @@ import { Html, useVideoTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { useAssetStore } from "../stores/useAssetStore";
 
 const SCREEN_DIMENSIONS = [0.77 * 1.05, 0.453 * 1.05];
 const SCREEN_COLOR = 0x99B2FF;
@@ -18,14 +19,16 @@ export default function TVScreen({
     isYoutube = false,
 }) {
     const [tvEnabled, setTvEnabled] = useState(true);
-    const iframeRef = useRef();
+    const getAsset = useAssetStore((state) => state.getAsset);
 
-    let tvMaterial;
+    const iframeRef = useRef();
+    const tvMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0x000000 }), []);
+
+    // If it's a normal video, load the video texture
     if (!isYoutube) {
-        const videoTexture = useVideoTexture(video);
-        tvMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: SCREEN_COLOR, map: videoTexture }), [videoTexture]);
-    } else {
-        tvMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0x000000 }), []);
+        const videoTexture = getAsset(video);
+        tvMaterial.color = SCREEN_COLOR;
+        tvMaterial.map = videoTexture;
     }
 
     const powerMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0xff0000 }), []);
@@ -44,14 +47,20 @@ export default function TVScreen({
     const onPowerClick = () => setTvEnabled((s) => !s);
 
     useEffect(() => {
-        const newLightColor = tvEnabled ? 1 : 0;
-        gsap.to(lightMaterial.color, { duration: 0.2, r: newLightColor, g: newLightColor, b: newLightColor });
+        if (isYoutube) {
+            // iframe change
 
-        tvMaterial.color = tvEnabled ? new THREE.Color(SCREEN_COLOR) : new THREE.Color(0x000000);
-        if (iframeRef.current) {
-            iframeRef.current.style.display = tvEnabled ? "block" : "none";
+            if (iframeRef.current) {
+                iframeRef.current.style.display = tvEnabled ? "block" : "none";
+            }
+        } else {
+            // color change
+
+            const newLightColor = tvEnabled ? 1 : 0;
+            gsap.to(lightMaterial.color, { duration: 0.2, r: newLightColor, g: newLightColor, b: newLightColor });
+
+            tvMaterial.color = tvEnabled ? new THREE.Color(SCREEN_COLOR) : new THREE.Color(0x000000);
         }
-
     }, [tvEnabled, lightMaterial, tvMaterial]);
 
     return <>
@@ -61,7 +70,7 @@ export default function TVScreen({
                     <iframe
                         src={'https://www.youtube.com' + video + '?autoplay=1&mute=1&controls=0'}
                         title="YouTube"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         style={{
                             height: "380px",
                             width: "660px",
@@ -70,6 +79,7 @@ export default function TVScreen({
                             display: "block"
                         }}
                         ref={iframeRef}
+                        anonymous="true"
                     />
                 </Html>
 

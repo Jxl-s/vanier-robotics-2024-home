@@ -37,24 +37,20 @@ export const useAnimationStore = create((set) => ({
     isAnimating: false,
     focusedObject: '',
 
-    // References for the camera and the controls, to use outside of the store
-    lastCamera: undefined,
-    lastControls: undefined,
+    threeState: {},
+    setThreeState: (state) => set({ threeState: state }),
 
     setLeaveEvent: (callback) => {
         // call the previous function, before setting the new event
         set({ leaveEvent: callback });
     },
 
-    animateBack: async (camera, controls) => {
+    animateBack: async () => {
         const state = useAnimationStore.getState();
         if (state.isAnimating) return;
 
-        camera = camera ?? state.lastCamera;
-        controls = controls ?? state.lastControls;
-
         // call the animate to function
-        const success = await state.animateTo(camera, controls, state.positionBeforeAnimate, state.lookAtBeforeAnimate, { stepFactor: 1 });
+        const success = await state.animateTo(state.positionBeforeAnimate, state.lookAtBeforeAnimate, { stepFactor: 1 });
 
         // reset the animation state
         if (success) {
@@ -64,10 +60,11 @@ export const useAnimationStore = create((set) => ({
         return success;
     },
 
-    animateTo: (camera, controls, position, lookAt, params = {}) => {
-        set({ lastCamera: camera, lastControls: controls });
-
+    animateTo: (position, lookAt, params = {}) => {
         return new Promise((resolve) => {
+            const { controls, camera } = useAnimationStore.getState().threeState;
+            if (!controls || !camera) return resolve(false);
+
             const state = useAnimationStore.getState();
             if (state.isAnimating) return resolve(false);
 

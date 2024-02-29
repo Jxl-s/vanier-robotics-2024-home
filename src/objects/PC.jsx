@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react"
-import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import HtmlLabel from "../components/HtmlLabel";
 import * as THREE from "three";
@@ -10,7 +9,6 @@ export default function PC({ geometry, material, position, screen }) {
     const modelRef = useRef();
     const screenRef = useRef();
 
-    const { camera, controls } = useThree();
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
     const registerMaterial = useMaterialStore((state) => state.registerMaterial);
@@ -44,7 +42,7 @@ export default function PC({ geometry, material, position, screen }) {
         const targetPosition = modelPosition.clone();
         targetPosition.x += 2;
 
-        const success = await animateTo(camera, controls, targetPosition, modelPosition, { name: 'PC' });
+        const success = await animateTo(targetPosition, modelPosition, { name: 'PC' });
         if (success) {
             setLeaveEvent(() => {
                 gsap.to(screenRef.current.material.uniforms.uBrightness, {

@@ -1,4 +1,3 @@
-import { useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react"
 import HtmlLabel from "../components/HtmlLabel";
 import { useAnimationStore } from "../stores/useAnimationStore";
@@ -9,7 +8,6 @@ import { useMaterialStore } from "../stores/useMaterialStore";
 export default function SimpleClickable({ props, cameraOffset, label, name }) {
     const modelRef = useRef();
 
-    const { camera, controls } = useThree();
     const animateTo = useAnimationStore((state) => state.animateTo);
     const registerMaterial = useMaterialStore((state) => state.registerMaterial);
 
@@ -44,7 +42,7 @@ export default function SimpleClickable({ props, cameraOffset, label, name }) {
         targetPosition.y += cameraOffset.y;
         targetPosition.z += cameraOffset.z;
 
-        await animateTo(camera, controls, targetPosition, modelPosition, { name: name ?? '' });
+        await animateTo(targetPosition, modelPosition, { name: name ?? '' });
     };
 
     return <mesh {...props} ref={modelRef} onPointerEnter={onHover} onPointerLeave={onLeave} onClick={onClick}>

@@ -2,12 +2,24 @@ import { Bounds, OrbitControls, Stage, Stars, useProgress } from "@react-three/d
 import { Scene } from "./Scene";
 import { Robot } from "./objects/Robot";
 import { Perf } from "r3f-perf";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import Progress from "./Progress";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useMaterialStore } from "./stores/useMaterialStore";
+import { useAnimationStore } from "./stores/useAnimationStore";
+import Loading from "./Loading";
 
 export default function Experience() {
+    const camera = useThree((s) => s.camera);
+    const controls = useThree((s) => s.controls);
+    const setThreeState = useAnimationStore((state) => state.setThreeState);
+
+    useEffect(() => {
+        if (camera && controls) {
+            setThreeState({ camera, controls });
+        }
+    }, [camera, controls]);
+
     useFrame((_, delta) => {
         // Handle all materials
         useMaterialStore.getState().materials.forEach((material) => {
@@ -28,13 +40,17 @@ export default function Experience() {
         />
         <axesHelper />
         <Perf />
-        <Robot scale={[4, 4, 4]} />
         <Stars radius={1} depth={50} count={500} factor={5} saturation={1} fade speed={2} />
 
         {/* Progressivly load the scene */}
-        <Suspense fallback={<Progress />}>
+        {/* <Suspense fallback={<Progress />}> */}
+
+        <Loading>
+            <Robot scale={[4, 4, 4]} />
             <Scene scale={[4, 4, 4]} />
-        </Suspense>
+        </Loading>
+
+        {/* </Suspense> */}
 
         {/* Center the camera, use a custom bounding box */}
         <Bounds fit observe margin={0.9}>

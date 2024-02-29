@@ -4,10 +4,10 @@ Command: npx gltfjsx@6.2.16 .\public\models\other.glb
 */
 
 import React, { forwardRef, useEffect, useMemo, useRef } from 'react'
-import { Shadow, useGLTF, useTexture } from '@react-three/drei'
+import { Shadow } from '@react-three/drei'
 import * as THREE from "three";
-import { useFrame } from '@react-three/fiber';
 import gsap from 'gsap';
+import { useAssetStore } from '../stores/useAssetStore';
 
 const RobotWheel = forwardRef(({ position, inGeometry, inMaterial, outGeometry, outMaterial }, ref) => {
   return <group position={position} rotation={[0, Math.PI / 2, 0]} ref={ref}>
@@ -18,13 +18,10 @@ const RobotWheel = forwardRef(({ position, inGeometry, inMaterial, outGeometry, 
 
 RobotWheel.displayName = 'RobotWheel';
 
-
-// Define the 'nodes' variable here
-
-
 export function Robot(props) {
-  const { nodes } = useGLTF('/models/other.glb');
-  const matcapTexture = useTexture('/textures/matcap.png');
+  const getAsset = useAssetStore((state) => state.getAsset);
+  const { nodes } = getAsset('otherModel');
+  const matcapTexture = getAsset('matcapTexture');
 
   const matcapMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture, color: 0xE7534C });
   const wheelInMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture, color: 0xF5F242 });
@@ -91,7 +88,7 @@ export function Robot(props) {
   return (
     <group {...props} dispose={null}>
       <mesh geometry={nodes.Plane.geometry} material={matcapMaterial} position={movementPositions[0]} ref={robotRef}>
-        <Shadow position-y={-0.16} position-x={0.005} position-z={0.005} scale={0.4} opacity={0.3}/>
+        <Shadow position-y={-0.16} position-x={0.005} position-z={0.005} scale={0.4} opacity={0.3} />
         <RobotWheel ref={backRightWheel} position={[0.12, -0.138, 0.12]} inGeometry={nodes.Cylinder_1.geometry} inMaterial={wheelInMaterial} outGeometry={nodes.Cylinder_2.geometry} outMaterial={wheelOutMaterial} />
         <RobotWheel ref={frontRightWheel} position={[0.12, -0.138, -0.12]} inGeometry={nodes.Cylinder_1.geometry} inMaterial={wheelInMaterial} outGeometry={nodes.Cylinder_2.geometry} outMaterial={wheelOutMaterial} />
         <RobotWheel ref={frontLeftWheel} position={[-0.0925, -0.138, -0.12]} inGeometry={nodes.Cylinder_1.geometry} inMaterial={wheelInMaterial} outGeometry={nodes.Cylinder_2.geometry} outMaterial={wheelOutMaterial} />
@@ -100,5 +97,3 @@ export function Robot(props) {
     </group>
   )
 }
-
-useGLTF.preload('/models/other.glb')
