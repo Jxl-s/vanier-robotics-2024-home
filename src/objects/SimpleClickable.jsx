@@ -8,15 +8,7 @@ import { useMaterialStore } from "../stores/useMaterialStore";
 export default function SimpleClickable({ props, cameraOffset, objectOffset, label, name }) {
     objectOffset = objectOffset ?? { x: 0, y: 0, z: 0 };
     const modelRef = useRef();
-
     const animateTo = useAnimationStore((state) => state.animateTo);
-    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
-
-    useEffect(() => {
-        if (!modelRef.current) return;
-        registerMaterial(modelRef.current.material);
-
-    }, [modelRef]);
 
     const onHover = (e) => {
         e.stopPropagation();

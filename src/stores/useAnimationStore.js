@@ -50,7 +50,7 @@ export const useAnimationStore = create((set) => ({
         if (state.isAnimating) return;
 
         // call the animate to function
-        const success = await state.animateTo(state.positionBeforeAnimate, state.lookAtBeforeAnimate, { stepFactor: 1 });
+        const success = await state.animateTo(state.positionBeforeAnimate, state.lookAtBeforeAnimate, { stepFactor: 1, isGoBack: true });
 
         // reset the animation state
         if (success) {
@@ -66,6 +66,7 @@ export const useAnimationStore = create((set) => ({
             if (!controls || !camera) return resolve(false);
 
             const state = useAnimationStore.getState();
+            if (state.focusedObject && !params.isGoBack) return resolve(false);
             if (state.isAnimating) return resolve(false);
 
             // Call leave event

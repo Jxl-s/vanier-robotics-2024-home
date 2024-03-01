@@ -11,13 +11,6 @@ export default function PC({ geometry, material, position, screen }) {
 
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
-    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
-
-    useEffect(() => {
-        if (!modelRef.current) return;
-        registerMaterial(modelRef.current.material);
-        registerMaterial(screenRef.current.material);
-    }, [modelRef]);
 
     const onHover = (e) => {
         e.stopPropagation();

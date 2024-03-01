@@ -12,21 +12,7 @@ export default function Projector({ geometry, material, position, screen }) {
 
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
-
-    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
     const updateNightMix = useMaterialStore((state) => state.updateNightMix);
-    useEffect(() => {
-        if (!frameRef.current) return;
-        if (!screenRef.current) return;
-
-        registerMaterial(frameRef.current.material);
-        registerMaterial(screenRef.current.material);
-
-        // Change screen shader uniforms for that "portal" effect
-        screenRef.current.material.uniforms.uBrightness.value = 1;
-        screenRef.current.material.uniforms.uColorLow.value = new THREE.Color(0xffffff);
-        screenRef.current.material.uniforms.uColorHigh.value = new THREE.Color(0x5a5cb8);
-    }, [frameRef]);
 
     const onHover = (e) => {
         e.stopPropagation();

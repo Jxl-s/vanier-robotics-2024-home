@@ -6,7 +6,6 @@ import { Suspense, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMaterialStore } from "./stores/useMaterialStore";
 import { useAnimationStore } from "./stores/useAnimationStore";
-import Loading from "./Loading";
 
 export default function Experience() {
     const camera = useThree((s) => s.camera);
@@ -44,10 +43,8 @@ export default function Experience() {
         {/* Progressivly load the scene */}
         {/* <Suspense fallback={<Progress />}> */}
 
-        <Loading>
-            <Robot scale={[4, 4, 4]} />
-            <Scene scale={[4, 4, 4]} />
-        </Loading>
+        <Robot scale={[4, 4, 4]} />
+        <Scene scale={[4, 4, 4]} />
 
         {/* </Suspense> */}
 

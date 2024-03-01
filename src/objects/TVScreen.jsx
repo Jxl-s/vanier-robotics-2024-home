@@ -25,11 +25,19 @@ export default function TVScreen({
     const tvMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0x000000 }), []);
 
     // If it's a normal video, load the video texture
-    if (!isYoutube) {
-        const videoTexture = getAsset(video);
-        tvMaterial.color = SCREEN_COLOR;
-        tvMaterial.map = videoTexture;
-    }
+    useEffect(() => {
+        if (!isYoutube) {
+            const videoTexture = getAsset(video);
+            tvMaterial.color = SCREEN_COLOR;
+            tvMaterial.map = videoTexture;
+        }
+    }, [isYoutube, getAsset, video, tvMaterial]);
+
+    useEffect(() => {
+        if (tvMaterial.map) {
+            tvMaterial.map.source.data.play().catch((e) => console.log("Failed to play video", e))
+        }
+    }, [tvMaterial]);
 
     const powerMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0xff0000 }), []);
     const lightMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0xffffff }), []);

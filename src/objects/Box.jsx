@@ -11,12 +11,6 @@ export default function Box({ geometry, material, position, rotation, cover }) {
 
     const animateTo = useAnimationStore((state) => state.animateTo);
     const setLeaveEvent = useAnimationStore((state) => state.setLeaveEvent);
-    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
-
-    useEffect(() => {
-        if (!boxRef.current) return;
-        registerMaterial(boxRef.current.material);
-    }, [boxRef]);
 
     const onHover = (e) => {
         e.stopPropagation();

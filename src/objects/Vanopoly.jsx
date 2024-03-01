@@ -5,10 +5,8 @@ const BLINK_FREQUENCY = 2000;
 
 export default function Vanopoly(props) {
     const textRef = useRef();
-    const registerMaterial = useMaterialStore((state) => state.registerMaterial);
     useEffect(() => {
         if (!textRef.current) return;
-        registerMaterial(textRef.current.material);
 
         // At random intervals, change the value of uLightUp
         let lightUp = false;
