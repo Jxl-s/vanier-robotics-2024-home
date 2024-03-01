@@ -3,18 +3,26 @@ import { ALL_ASSETS_COUNT, useAssetStore } from "./stores/useAssetStore"
 import gsap from "gsap";
 
 export default function LoadingScreen({ children }) {
-    const loadedCount = useAssetStore((state) => state.loadedCount);
-    const isLoaded = useAssetStore((state) => state.isLoaded);
-    const getAsset = useAssetStore((state) => state.getAsset);
+    const loadedCount = useAssetStore((state) => state.loadedCount); // number of loaded assets
+    const isLoaded = useAssetStore((state) => state.isLoaded); // if all assets are loaded
+    const getAsset = useAssetStore((state) => state.getAsset); // get the loading video
+    const isCreated = useAssetStore((state) => state.isCreated); // if the canvas is created
 
     // Hide the loading screen after all assets are loaded
+    const [showLoading, setShowLoading] = useState(true);
     const [showExperience, setShowExperience] = useState(false);
     const [videoSource, setVideoSource] = useState(null);
 
-    // References
-    const containerRef = useRef();
-    const startButtonRef = useRef();
     const videoRef = useRef();
+    const containerRef = useRef();
+
+    const onVideoEnded = () => {
+        containerRef.current.childNodes[0].style.opacity = 0;
+        setTimeout(() => {
+            containerRef.current.style.opacity = 0;
+            setTimeout(() => setShowLoading(false), 1000);
+        }, 1000);
+    }
 
     // Try getting the video source
     useEffect(() => {
@@ -27,47 +35,14 @@ export default function LoadingScreen({ children }) {
         setVideoSource(window.URL.createObjectURL(video));
     }, [loadedCount, getAsset, videoSource]);
 
-    const onVideoEnded = () => {
-        // Hide video, then hide the background
-        const hideContainer = () => gsap.to(containerRef.current, {
-            duration: 1, opacity: 0, pointerEvents: 'none', onComplete: () => containerRef.current.style.display = 'none'
-        });
-
-        hideContainer();
-        gsap.to(videoRef.current, {
-            duration: 0.3, opacity: 0, pointerEvents: 'none', onComplete: () => {
-                videoRef.current.style.display = 'none';
-                setTimeout(hideContainer, 1000);
-            }
-        });
-    }
-
-    const showVideo = (e) => {
-        e.target.disabled = true;
-        e.target.innerText = 'Loading...';
-
-        // Start showing the experience as well
-        setShowExperience(true);
-
-        // Defer animations by 100ms, so no lag when loading
-        setTimeout(() => {
-            gsap.to(startButtonRef.current, { duration: 1, opacity: 0, pointerEvents: 'none' });
-            gsap.to(videoRef.current, {
-                duration: 1,
-                opacity: 1,
-                pointerEvents: 'all',
-                onComplete: () => {
-                    videoRef.current.play().catch((err) => {
-                        console.error("Error playing video", err);
-                        onVideoEnded();
-                    });
-                }
-            });
-        }, 1000);
-    }
+    useEffect(() => {
+        if (!isCreated) return;
+        videoRef.current.play();
+        videoRef.current.style.opacity = 1;
+    }, [isCreated])
 
     return <>
-        <main ref={containerRef} style={{
+        {showLoading && <main style={{
             width: "100%",
             height: "100%",
             position: "fixed",
@@ -77,19 +52,15 @@ export default function LoadingScreen({ children }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-        }}>
-            <div style={{ textAlign: 'center', color: 'white' }}>
-                <video width={'100%'} height={'200px'} autoPlay={true} muted={true} playsInline={true} onEnded={() => setVideoEnded(true)} ref={videoRef} style={{
-                    // add some drop shadow
-                    // filter: "drop-shadow(0 0 16px rgba(0, 0, 0, 1))",
-                }}>
-                    <source src={videoSource} type="video/webm" />
-                </video>
-                {isLoaded && <video src={videoSource} playsInline={true} controls={false} muted={true} ref={videoRef} style={{ opacity: 0, width: '200px' }} onEnded={() => onVideoEnded()} />}
+            transitionDuration: "1s",
+        }} ref={containerRef}>
+            <div style={{ textAlign: 'center', color: 'white', transitionDuration: "1s" }}>
+                {isLoaded && <video width={'100%'} height={'200px'} muted playsInline src={videoSource} ref={videoRef} onEnded={() => onVideoEnded()} style={{ opacity: 0, transitionDuration: '1s' }} />}
                 {isLoaded ? <p>Ready!</p> : <p>Progress: {loadedCount} / {ALL_ASSETS_COUNT}</p>}
-                {isLoaded && <button onClick={showVideo} ref={startButtonRef}>Start</button>}
+
+                {!showExperience && <button onClick={() => setShowExperience(true)}>Start</button>}
             </div>
-        </main>
+        </main>}
         {showExperience && children}
     </>
 

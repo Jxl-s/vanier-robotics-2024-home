@@ -35,7 +35,10 @@ export const ALL_ASSETS = [
 export const ALL_ASSETS_COUNT = ALL_ASSETS.length;
 
 export const useAssetStore = create((set) => ({
-    // Load staet
+    // Flag to see if the canvas is created
+    isCreated: false,
+
+    // Load state
     isLoaded: false,
     loadedCount: 0,
 
