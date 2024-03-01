@@ -42,15 +42,18 @@ export default function LoadingScreen({ children }) {
         });
     }
 
-    const showVideo = () => {
+    const showVideo = (e) => {
+        e.target.disabled = true;
+        e.target.innerText = 'Loading...';
+
         // Start showing the experience as well
         setShowExperience(true);
 
         // Defer animations by 100ms, so no lag when loading
         setTimeout(() => {
-            gsap.to(startButtonRef.current, { duration: 0.3, opacity: 0, pointerEvents: 'none' });
+            gsap.to(startButtonRef.current, { duration: 1, opacity: 0, pointerEvents: 'none' });
             gsap.to(videoRef.current, {
-                duration: 0.3,
+                duration: 1,
                 opacity: 1,
                 pointerEvents: 'all',
                 onComplete: () => {
@@ -60,7 +63,7 @@ export default function LoadingScreen({ children }) {
                     });
                 }
             });
-        }, 100);
+        }, 1000);
     }
 
     return <>
@@ -84,7 +87,7 @@ export default function LoadingScreen({ children }) {
                 </video>
                 {isLoaded && <video src={videoSource} playsInline={true} controls={false} muted={true} ref={videoRef} style={{ opacity: 0, width: '200px' }} onEnded={() => onVideoEnded()} />}
                 {isLoaded ? <p>Ready!</p> : <p>Progress: {loadedCount} / {ALL_ASSETS_COUNT}</p>}
-                {isLoaded && <button onClick={() => showVideo()} ref={startButtonRef}>Start</button>}
+                {isLoaded && <button onClick={showVideo} ref={startButtonRef}>Start</button>}
             </div>
         </main>
         {showExperience && children}
