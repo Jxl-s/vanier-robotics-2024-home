@@ -20,6 +20,7 @@ export default function TVScreen({
 }) {
     const [tvEnabled, setTvEnabled] = useState(true);
     const getAsset = useAssetStore((state) => state.getAsset);
+    const isCreated = useAssetStore((state) => state.isCreated);
 
     const iframeRef = useRef();
     const tvMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0x000000 }), []);
@@ -34,10 +35,12 @@ export default function TVScreen({
     }, [isYoutube, getAsset, video, tvMaterial]);
 
     useEffect(() => {
-        if (tvMaterial.map) {
+        // isCreated, so that we only play the video once its loaded (safari support)
+        if (tvMaterial.map && isCreated) {
+            console.log("playing video!");
             tvMaterial.map.source.data.play().catch((e) => console.log("Failed to play video", e))
         }
-    }, [tvMaterial]);
+    }, [tvMaterial, isCreated]);
 
     const powerMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0xff0000 }), []);
     const lightMaterial = useMemo(() => new THREE.MeshBasicMaterial({ color: 0xffffff }), []);

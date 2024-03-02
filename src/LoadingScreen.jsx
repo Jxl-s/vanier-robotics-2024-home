@@ -6,6 +6,7 @@ export default function LoadingScreen({ children }) {
     const loadedCount = useAssetStore((state) => state.loadedCount); // number of loaded assets
     const isLoaded = useAssetStore((state) => state.isLoaded); // if all assets are loaded
     const getAsset = useAssetStore((state) => state.getAsset); // get the loading video
+    const setIsCreated = useAssetStore((state) => state.setIsCreated);
 
     const [showInterface, setShowInterface] = useState(true);
     const [showExperience, setShowExperience] = useState(false);
@@ -80,6 +81,7 @@ export default function LoadingScreen({ children }) {
         await sleep(500);
 
         setShowInterface(false);
+        setIsCreated(true);
     }
 
     return <>

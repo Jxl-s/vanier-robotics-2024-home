@@ -35,6 +35,10 @@ export const ALL_ASSETS = [
 export const ALL_ASSETS_COUNT = ALL_ASSETS.length;
 
 export const useAssetStore = create((set) => ({
+    // Flag to determine if the loading is done
+    isCreated: false,
+    setIsCreated: (value) => set({ isCreated: value }),
+
     // Load state
     isLoaded: false,
     loadedCount: 0,
