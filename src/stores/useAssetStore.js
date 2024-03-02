@@ -27,7 +27,7 @@ export const ALL_ASSETS = [
     },
     {
         type: "raw_video",
-        path: "/videos/vanopoly.webm",
+        path: "/videos/vanopoly.mp4",
         name: "vanopoly_intro",
     },
 ];
