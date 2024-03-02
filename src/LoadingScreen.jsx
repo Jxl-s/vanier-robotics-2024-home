@@ -55,6 +55,8 @@ export default function LoadingScreen({ children }) {
 
     const onEnterVanopoly = async () => {
         // Hide the button, then show the video
+        buttonRef.current.style.opacity = 0;
+        await sleep(500);
         loadingRef.current.style.opacity = 0;
         await sleep(500);
 
@@ -71,6 +73,9 @@ export default function LoadingScreen({ children }) {
         await sleep(500);
 
         setShowLoadingBar(false);
+        await sleep(500);
+
+        interfaceRef.current.style.opacity = 0;
         await sleep(500);
 
         setShowInterface(false);
