@@ -56,8 +56,10 @@ export default function LoadingScreen({ children }) {
 
     const onEnterVanopoly = () => {
         // Hide the button, then show the video
-
         buttonRef.current.style.opacity = 0;
+        buttonRef.current.style.pointer = "default";
+        buttonRef.current.disabled = true;
+
         setTimeout(() => {
             loadingRef.current.style.opacity = 0;
             loadingRef.current.style.display = 'none'
@@ -102,6 +104,8 @@ export default function LoadingScreen({ children }) {
                                 cursor: "pointer",
                                 opacity: 0,
                                 transitionDuration: '500ms',
+                                color: "rgb(204, 51, 52)",
+                                fontSize: "1.5em"
                             }} onClick={onEnterVanopoly}><b>Enter Vanopoly</b></button>}
                         </div>
                     </div>
