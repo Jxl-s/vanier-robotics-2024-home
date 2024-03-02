@@ -37,7 +37,6 @@ export default function TVScreen({
     useEffect(() => {
         // isCreated, so that we only play the video once its loaded (safari support)
         if (tvMaterial.map && isCreated) {
-            console.log("playing video!");
             tvMaterial.map.source.data.play().catch((e) => console.log("Failed to play video", e))
         }
     }, [tvMaterial, isCreated]);

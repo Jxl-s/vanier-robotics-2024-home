@@ -17,6 +17,20 @@ import * as THREE from "three";
 import { useMaterialStore } from './stores/useMaterialStore';
 import { useAssetStore } from './stores/useAssetStore';
 
+const COMMON_OBJECTS = [
+  '_General_',
+  'Vanopoly',
+  'Box',
+  'PC',
+  'BoardRed',
+  'BoardYellow',
+  'BoardGray',
+  'Portfolio',
+  'Shelves',
+  'Projector',
+  'Mat'
+];
+
 export function Scene(props) {
   const getAsset = useAssetStore((state) => state.getAsset);
   const { nodes } = getAsset('sceneModel');
@@ -28,36 +42,55 @@ export function Scene(props) {
   bakedNight.flipY = false;
 
   const registerMaterial = useMaterialStore((state) => state.registerMaterial);
-  const commonMaterial = useMemo(() => Array(11).fill().map(() => {
-    const newMaterial = new BakedMaterial({
-      uTextureDay: bakedDay,
-      uTextureNight: bakedNight,
-      uNightMix: 0,
+
+  const commonMaterials = useMemo(() => {
+    const materials = [];
+
+    for (const name of COMMON_OBJECTS) {
+      const newMaterial = new BakedMaterial({
+        uTextureDay: bakedDay,
+        uTextureNight: bakedNight,
+        uNightMix: 0,
+        uTime: 0,
+      });
+
+      registerMaterial(newMaterial);
+      materials[name] = newMaterial;
+    }
+
+    return materials;
+  }, [bakedDay, bakedNight, registerMaterial]);
+
+  const pcScreenMaterial = useMemo(() => {
+    const newMaterial = new PCScreenMaterial({
+      uBrightness: 0,
       uTime: 0,
-    });
+
+      uColorLow: new THREE.Color(0x000000),
+      uColorHigh: new THREE.Color(0xffffff),
+    })
 
     registerMaterial(newMaterial);
     return newMaterial;
-  }), [bakedDay, bakedNight, registerMaterial]);
+  }, [registerMaterial]);
 
-  const [pcScreenMaterial, portalMaterial] = useMemo(() => Array(2).fill().map((_, i) => {
+
+  const portalMaterial = useMemo(() => {
     const newMaterial = new PCScreenMaterial({
-      // portal is bright by default
-      uBrightness: i === 1 ? 1 : 0,
+      uBrightness: 1,
       uTime: 0,
 
-      // portal and pc have different colors
-      uColorLow: new THREE.Color(i === 1 ? 0xffffff : 0x000000),
-      uColorHigh: new THREE.Color(i === 1 ? 0x5a5cb8 : 0xffffff),
-    });
+      uColorLow: new THREE.Color(0xffffff),
+      uColorHigh: new THREE.Color(0x5a5cb8),
+    })
 
     registerMaterial(newMaterial);
-    return newMaterial
-  }), [registerMaterial]);
+    return newMaterial;
+  }, [registerMaterial]);
 
   return (
     <group {...props} dispose={null}>
-      <Vanopoly geometry={nodes.VanopolyText.geometry} material={commonMaterial[1]} position={[0.102, 0.387, -1.029]} rotation={[Math.PI / 2, -0.129, 0]} />
+      <Vanopoly geometry={nodes.VanopolyText.geometry} material={commonMaterials.Vanopoly} position={[0.102, 0.387, -1.029]} rotation={[Math.PI / 2, -0.129, 0]} />
 
       {/* Remove original screens, replace with screens */}
       {/* <mesh geometry={nodes.TV1Screen.geometry} material={commonMaterial} position={[-0.869, 0.83, -0.227]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} /> */}
@@ -90,18 +123,18 @@ export function Scene(props) {
         }}
       />
 
-      <PC geometry={nodes.PC.geometry} material={commonMaterial[2]} position={[-0.659, -0.345, -0.092]} screen={{
+      <PC geometry={nodes.PC.geometry} material={commonMaterials.PC} position={[-0.659, -0.345, -0.092]} screen={{
         geometry: nodes.PCScreen.geometry,
         position: [0.053, 0.015, 0.002],
         material: pcScreenMaterial
       }} />
 
-      <Box geometry={nodes.Box.geometry} material={commonMaterial[3]} position={[-0.543, -0.881, 0.612]} rotation={[0, -0.364, 0]} cover={{
+      <Box geometry={nodes.Box.geometry} material={commonMaterials.Box} position={[-0.543, -0.881, 0.612]} rotation={[0, -0.364, 0]} cover={{
         geometry: nodes.BoxCover.geometry,
         position: [-0.117, 0.097, -0.003]
       }} />
 
-      <Projector geometry={nodes.Projector.geometry} material={commonMaterial[4]} position={[1.537, -0.347, -1.339]} screen={{
+      <Projector geometry={nodes.Projector.geometry} material={commonMaterials.Projector} position={[1.537, -0.347, -1.339]} screen={{
         geometry: nodes.ProjectorScreen.geometry,
         material: portalMaterial,
         position: [0.091, 0.096, -0.001]
@@ -109,7 +142,7 @@ export function Scene(props) {
 
       <SimpleClickable props={{
         geometry: nodes.Shelves.geometry,
-        material: commonMaterial[5],
+        material: commonMaterials.Shelves,
         position: [-0.231, -0.081, -1.154],
         rotation: [0, Math.PI / 2, 0]
       }}
@@ -126,7 +159,7 @@ export function Scene(props) {
 
       <SimpleClickable props={{
         geometry: nodes.PaperRed.geometry,
-        material: commonMaterial[6],
+        material: commonMaterials.BoardRed,
         position: [-0.989, 0.266, -0.068],
       }}
         cameraOffset={{ x: 1.5, y: 0, z: 0 }}
@@ -141,7 +174,7 @@ export function Scene(props) {
 
       <SimpleClickable props={{
         geometry: nodes.PaperYellow.geometry,
-        material: commonMaterial[7],
+        material: commonMaterials.BoardYellow,
         position: [-0.995, 0.124, -0.582],
       }}
         cameraOffset={{ x: 1.5, y: 0, z: 0 }}
@@ -156,7 +189,7 @@ export function Scene(props) {
 
       <SimpleClickable props={{
         geometry: nodes.PaperGray.geometry,
-        material: commonMaterial[8],
+        material: commonMaterials.BoardGray,
         position: [-0.992, 0.017, -0.025],
       }}
         cameraOffset={{ x: 1.5, y: 0, z: 0 }}
@@ -171,7 +204,7 @@ export function Scene(props) {
 
       <SimpleClickable props={{
         geometry: nodes.Portfolios.geometry,
-        material: commonMaterial[9],
+        material: commonMaterials.Portfolio,
         position: [-0.742, -0.573, -0.561],
         rotation: [0, 0.64, 0],
       }}
@@ -187,7 +220,7 @@ export function Scene(props) {
       {/* <mesh geometry={nodes.Portfolios.geometry} material={commonMaterial} position={[-0.742, -0.573, -0.561]} rotation={[0, 0.64, 0]} /> */}
       <SimpleClickable props={{
         geometry: nodes.Mat.geometry,
-        material: commonMaterial[10],
+        material: commonMaterials.Mat,
         position: [1.768, -0.996, 0.36],
       }}
         cameraOffset={{ x: -6, y: 4, z: 0 }}
@@ -196,10 +229,10 @@ export function Scene(props) {
       />
 
       {/* Stuff that cant be clicked */}
-      <Chair geometry={nodes.Chair.geometry} material={commonMaterial[0]} position={[-0.142, -0.638, -0.138]} rotation={[Math.PI, -1.048, Math.PI]} />
-      <mesh geometry={nodes.Around.geometry} material={commonMaterial[0]} position={[0.468, -0.17, -0.294]} />
-      <mesh geometry={nodes.Decor.geometry} material={commonMaterial[0]} position={[-0.154, -0.818, -0.039]} rotation={[Math.PI, -0.278, Math.PI]} />
-      <mesh geometry={nodes.TV1.geometry} material={commonMaterial[0]} position={[0.371, 0.785, -0.766]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
+      <Chair geometry={nodes.Chair.geometry} material={commonMaterials._General_} position={[-0.142, -0.638, -0.138]} rotation={[Math.PI, -1.048, Math.PI]} />
+      <mesh geometry={nodes.Around.geometry} material={commonMaterials._General_} position={[0.468, -0.17, -0.294]} />
+      <mesh geometry={nodes.Decor.geometry} material={commonMaterials._General_} position={[-0.154, -0.818, -0.039]} rotation={[Math.PI, -0.278, Math.PI]} />
+      <mesh geometry={nodes.TV1.geometry} material={commonMaterials._General_} position={[0.371, 0.785, -0.766]} rotation={[Math.PI / 2, 1.396, -Math.PI / 2]} />
     </group >
   )
 }
