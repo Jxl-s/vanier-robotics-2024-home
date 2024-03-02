@@ -13,6 +13,9 @@ export default function LoadingScreen({ children }) {
     const [showExperience, setShowExperience] = useState(false);
     const [videoSource, setVideoSource] = useState(null);
 
+    // Safari is a weird exception
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     const videoRef = useRef();
     const containerRef = useRef();
 
@@ -37,8 +40,6 @@ export default function LoadingScreen({ children }) {
 
     useEffect(() => {
         if (!isCreated) return;
-        videoRef.current.play();
-        videoRef.current.style.opacity = 1;
     }, [isCreated])
 
     return <>
@@ -55,10 +56,32 @@ export default function LoadingScreen({ children }) {
             transitionDuration: "1s",
         }} ref={containerRef}>
             <div style={{ textAlign: 'center', color: 'white', transitionDuration: "1s" }}>
-                {isLoaded && <video width={'100%'} height={'200px'} muted playsInline src={videoSource} ref={videoRef} onEnded={() => onVideoEnded()} style={{ opacity: 0, transitionDuration: '1s' }} />}
+                <video
+                    width={'100%'}
+                    height={'200px'}
+                    muted={true}
+                    playsInline={true}
+
+                    // safari doesn't work well with blobs, use the source url
+                    src={isSafari ? '/videos/vanopoly.webm' : videoSource}
+                    // src={videoSource}
+                    ref={videoRef}
+                    onEnded={() => onVideoEnded()}
+                    style={{ opacity: 0, transitionDuration: '1s' }}
+                />
                 {isLoaded ? <p>Ready!</p> : <p>Progress: {loadedCount} / {ALL_ASSETS_COUNT}</p>}
 
-                {!showExperience && <button onClick={() => setShowExperience(true)}>Start</button>}
+                {/* Apparently callback needs to be inline so that safari can play it */}
+                <button onClick={() => {
+                    videoRef.current.play().then(() => {
+                        videoRef.current.style.opacity = 1;
+                    }).catch((e) => {
+                        console.error('Error playing video', e);
+                        onVideoEnded();
+                    });
+
+                    setShowExperience(true);
+                }}>Start</button>
             </div>
         </main>}
         {showExperience && children}
