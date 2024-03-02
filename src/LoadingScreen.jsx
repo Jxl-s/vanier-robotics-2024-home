@@ -53,18 +53,19 @@ export default function LoadingScreen({ children }) {
         }
     }, [showVideo]);
 
-    const onEnterVanopoly = async () => {
+    const onEnterVanopoly = () => {
         // Hide the button, then show the video
-        buttonRef.current.style.opacity = 0;
-        await sleep(500);
-        loadingRef.current.style.opacity = 0;
-        await sleep(500);
 
-        loadingRef.current.style.display = 'none'
-        if (videoRef.current.paused) {
-            videoRef.current.style.opacity = 1;
-            videoRef.current.play();
-        }
+        buttonRef.current.style.opacity = 0;
+        setTimeout(() => {
+            loadingRef.current.style.opacity = 0;
+            loadingRef.current.style.display = 'none'
+
+            if (videoRef.current.paused) {
+                videoRef.current.style.opacity = 1;
+                videoRef.current.play();
+            }
+        }, 500);
     }
 
     const onVideoEnded = async () => {
