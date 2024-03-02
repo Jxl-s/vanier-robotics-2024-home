@@ -18,18 +18,16 @@ export default function LoadingScreen({ children }) {
     const interfaceRef = useRef();
     const loadingRef = useRef();
     const videoRef = useRef();
+    const buttonRef = useRef();
 
     useEffect(() => {
         async function handleLoaded() {
             if (!isLoaded) return;
-            // When the assets are loaded, start generating the scene, hide the loading screen, and show the video
+
+            // When the assets are loaded, start generating the scene, show the video
             setShowExperience(true);
             await sleep(1000);
 
-            loadingRef.current.style.opacity = 0;
-            await sleep(1000);
-
-            setShowLoadingBar(false);
             setShowVideo(true);
         }
 
@@ -46,12 +44,21 @@ export default function LoadingScreen({ children }) {
         setVideoSource(window.URL.createObjectURL(video));
     }, [loadedCount, getAsset, videoSource]);
 
-    const onEnterVanopoly = async (e) => {
+    useEffect(() => {
+        if (showVideo) {
+            // Defer the button opacity change
+            setTimeout(() => {
+                buttonRef.current.style.opacity = 1;
+            }, 100);
+        }
+    }, [showVideo]);
+
+    const onEnterVanopoly = async () => {
         // Hide the button, then show the video
-        e.target.style.opacity = 0;
+        loadingRef.current.style.opacity = 0;
         await sleep(500);
 
-        e.target.style.display = 'none'
+        loadingRef.current.style.display = 'none'
         if (videoRef.current.paused) {
             videoRef.current.style.opacity = 1;
             videoRef.current.play();
@@ -63,7 +70,7 @@ export default function LoadingScreen({ children }) {
         videoRef.current.style.opacity = 0;
         await sleep(500);
 
-        interfaceRef.current.style.opacity = 0;
+        setShowLoadingBar(false);
         await sleep(500);
 
         setShowInterface(false);
@@ -74,24 +81,38 @@ export default function LoadingScreen({ children }) {
             {showLoadingBar &&
                 <section style={{ transitionDuration: '1s', margin: "2em" }} ref={loadingRef}>
                     <label style={{ textAlign: "center", width: "100%" }}>Loading... ({Math.floor(loadedCount / ALL_ASSETS_COUNT * 100)}%) ({loadedCount}/{ALL_ASSETS_COUNT})</label>
-                    <div style={{ height: "20px", border: "2px solid white", padding: "4px", marginTop: "1em" }}>
-                        <div style={{ width: `${loadedCount / ALL_ASSETS_COUNT * 100}%`, height: "100%", backgroundColor: "white", transitionDuration: '1s' }} />
+                    <div style={{ height: "40px", border: "2px solid white", padding: "4px", marginTop: "1em" }}>
+                        <div style={{ width: `${loadedCount / ALL_ASSETS_COUNT * 100}%`, height: "100%", backgroundColor: "white", transitionDuration: '1s' }}>
+                            {showVideo && <button ref={buttonRef} style={{
+                                fontFamily: "monospace",
+                                textAlign: "center",
+                                backgroundColor: "transparent",
+                                border: "none",
+                                width: "100%",
+                                height: "100%",
+                                margin: "auto",
+                                cursor: "pointer",
+                                opacity: 0,
+                                transitionDuration: '500ms',
+                            }} onClick={onEnterVanopoly}><b>Enter Vanopoly</b></button>}
+                        </div>
                     </div>
                 </section>
             }
             {showVideo && <>
-                <button onClick={onEnterVanopoly} style={{ transitionDuration: '500ms' }}>Enter Vanopoly<br /></button>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
-                    <video
-                        ref={videoRef}
-                        width={'100%'}
-                        muted={true}
-                        playsInline={true}
-                        src={videoSource}
-                        style={{ opacity: 0, transitionDuration: '500ms', margin: '0 2em 0 2em' }}
-                        onEnded={onVideoEnded}
-                    />
-                </div>
+                <section style={{ transitionDuration: '1s', margin: "2em" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+                        <video
+                            ref={videoRef}
+                            width={'100%'}
+                            muted={true}
+                            playsInline={true}
+                            src={videoSource}
+                            style={{ opacity: 0, transitionDuration: '500ms', margin: '0 2em 0 2em' }}
+                            onEnded={onVideoEnded}
+                        />
+                    </div>
+                </section>
             </>}
         </main>}
         {showExperience && children}
