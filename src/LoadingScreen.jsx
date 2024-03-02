@@ -16,17 +16,24 @@ export default function LoadingScreen({ children }) {
     const [videoSource, setVideoSource] = useState(null);
 
     const interfaceRef = useRef();
+    const loadingRef = useRef();
     const videoRef = useRef();
 
     useEffect(() => {
-        if (isLoaded) {
+        async function handleLoaded() {
+            if (!isLoaded) return;
             // When the assets are loaded, start generating the scene, hide the loading screen, and show the video
             setShowExperience(true);
-            setTimeout(() => {
-                setShowLoadingBar(false);
-                setShowVideo(true);
-            }, 500);
+            await sleep(1000);
+
+            loadingRef.current.style.opacity = 0;
+            await sleep(1000);
+
+            setShowLoadingBar(false);
+            setShowVideo(true);
         }
+
+        handleLoaded();
     }, [isLoaded]);
 
     useEffect(() => {
@@ -63,13 +70,15 @@ export default function LoadingScreen({ children }) {
     }
 
     return <>
-        {showInterface && <main ref={interfaceRef} style={{ color: "white", width: "100%", height: "100%", zIndex: 20, backgroundColor: 'rgb(204, 51, 52)', position: "fixed", transitionDuration: '500ms' }}>
-            {showLoadingBar && <section style={{ transitionDuration: '500ms', opacity: isLoaded ? 0 : 1 }}>
-                <p>Loading... ({loadedCount}/{ALL_ASSETS_COUNT})</p>
-                <div style={{ width: "100%", height: "5px", backgroundColor: "gray" }}>
-                    <div style={{ width: `${loadedCount / ALL_ASSETS_COUNT * 100}%`, height: "100%", backgroundColor: "white", transitionDuration: '500ms' }} />
-                </div>
-            </section>}
+        {showInterface && <main ref={interfaceRef} style={{ color: "white", width: "100%", height: "100%", zIndex: 20, backgroundColor: 'rgb(204, 51, 52)', position: "fixed", transitionDuration: '500ms', fontFamily: "monospace" }}>
+            {showLoadingBar &&
+                <section style={{ transitionDuration: '1s', margin: "2em" }} ref={loadingRef}>
+                    <label style={{ textAlign: "center", width: "100%" }}>Loading... ({Math.floor(loadedCount / ALL_ASSETS_COUNT * 100)}%) ({loadedCount}/{ALL_ASSETS_COUNT})</label>
+                    <div style={{ height: "20px", border: "2px solid white", padding: "4px", marginTop: "1em" }}>
+                        <div style={{ width: `${loadedCount / ALL_ASSETS_COUNT * 100}%`, height: "100%", backgroundColor: "white", transitionDuration: '1s' }} />
+                    </div>
+                </section>
+            }
             {showVideo && <>
                 <button onClick={onEnterVanopoly} style={{ transitionDuration: '500ms' }}>Enter Vanopoly<br /></button>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>

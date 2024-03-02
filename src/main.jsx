@@ -5,7 +5,6 @@ import Experience from './Experience.jsx'
 import { Canvas } from '@react-three/fiber'
 import Interface from './Interface.jsx'
 import LoadingScreen from "./LoadingScreen.jsx"
-import { useAssetStore } from './stores/useAssetStore.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -15,8 +14,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         position: [5, 2, 10],
         fov: 60
       }}
-        // Necessary to skip the spike
-        onCreated={() => useAssetStore.setState({ isCreated: true })}
       >
         <Experience />
       </Canvas>
