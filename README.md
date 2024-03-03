@@ -1,8 +1,12 @@
-# React + Vite
+# Vanier Robotics 2024 Home Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The 3D home page for Vanier Robotics' 2024 website.
 
-Currently, two official plugins are available:
+## Details
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 3D experience developed with react-three-fiber
+- Model created with Blender
+
+## Demo
+
+A demonstration can be found [here](https://vanier-robotics-2024-home.vercel.app/)
